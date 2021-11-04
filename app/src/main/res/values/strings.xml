@@ -1,3 +1,36 @@
 <resources>
-    <string name="app_name">REUNION</string>
+    <string name="app_name">Ma réu</string>
+    <string name="new_meeting_title">Nouvelle réunion</string>
+    <string name="new_meeting_enter_name">Objet de la réunion</string>
+    <string name="delete_cross">Effacer</string>
+
+    <string name="ok">OK</string>
+    <string name="clear">Effacer</string>
+    <string name="clear_all">Effacer tout</string>
+    <string name="cancel">Annuler</string>
+    <string name="select_all">Tout sélectionner</string>
+    <string name="unselect_all">Sélectionner aucun</string>
+    <string name="reset_date">Réinitialiser la date</string>
+    <string name="reset_time">Réinitialiser l\'heure</string>
+    <string name="reset_duration">Réinitialiser la durée</string>
+    <string name="reset_all">Réinitialiser</string>
+
+    <string name="meeting_date">Date</string>
+    <string name="meeting_start">Début</string>
+    <string name="meeting_end">Fin</string>
+    <string name="meeting_duration">Durée</string>
+    <string name="units_mn">mn</string>
+    <string name ="filter_meetings"> Filtrer les réunions</string>
+    <string name="meeting_room">Salle</string>
+    <string name="meeting_users">Participants</string>
+    <string name="meeting_name">Nom réunion</string>
+    <string name="meeting_to_be_deleted">La réunion suivante va être effacée :</string>
+    <string name="select_a_day">Choisissez une date</string>
+    <string name="select_a_room">Choisissez une salle</string>
+    <string name="delete_meeting">Supprimer la réunion</string>
+    <string name="all_rooms">Toutes</string>
+    <string name="all_users">Tous</string>
+    <string name="none_room">Aucune</string>
+    <string name="none_user">Aucun</string>
+    <string name="meeting_average_duration">45</string>
 </resources>

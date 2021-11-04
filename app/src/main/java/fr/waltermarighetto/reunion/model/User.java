@@ -3,13 +3,13 @@ package fr.waltermarighetto.reunion.model;
 public class User {
     private String mUser;
 
-    public User getUser() {
-        return this;
+    public String getUser() {
+        return mUser;
     }
 
-    public User setUser(String user) {
-        mUser = user;
-    return this;
+    public void setUser(String userMail) {
+        mUser = userMail;
+
     }
 
 }

@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/new_meeting"
+    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+    android:layout_marginVertical="@dimen/activity_vertical_margin">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_meeting_title"
+        android:textAlignment="center"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- objet de la réunion avec delete image -->
+
+    <EditText
+        android:id="@+id/meeting_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/new_meeting_enter_name"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textAlignment="viewStart"
+
+        app:layout_constraintEnd_toStartOf="@id/icons_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <ImageView
+        android:id="@+id/clear_meeting_name"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:padding="18dp"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:clickable="true"
+        android:contentDescription="@string/delete_cross"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@id/meeting_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/meeting_name"
+        app:layout_constraintStart_toEndOf="@id/icons_guideline"
+        app:srcCompat="@drawable/ic_dialog_close_light" />
+
+    <!-- date de la réunion avec bouton pour ouvrir calendrier -->
+    <TextView
+        android:id="@+id/date_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/meeting_date"
+        android:textAlignment="viewStart"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/meeting_date"
+        app:layout_constraintEnd_toStartOf="@id/labels_guideline"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/meeting_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:focusable="false"
+        android:clickable="true"
+        android:maxLines="1"
+        android:text=" jeudi 14/10/2021"
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
+
+        app:layout_constraintStart_toEndOf="@id/date_label"
+        app:layout_constraintEnd_toStartOf="@id/icons_guideline"
+        app:layout_constraintTop_toBottomOf="@id/meeting_name" />
+
+
+    <ImageView
+        android:id="@+id/reset_date"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:padding="4dp"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:adjustViewBounds="false"
+        android:clickable="true"
+        android:contentDescription="@string/reset_date"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="@id/meeting_date"
+        app:layout_constraintBottom_toBottomOf="@id/meeting_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icons_guideline"
+
+        app:srcCompat="@drawable/reset" />
+
+    <!-- heure de la réunion avec bouton pour ouvrir le widget heure -->
+
+    <TextView
+        android:id="@+id/time_start_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/meeting_start"
+        android:textAlignment="viewStart"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/meeting_start_time"
+        app:layout_constraintEnd_toStartOf="@id/labels_guideline"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/meeting_start_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:text="10:30"
+
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toStartOf="@id/icons_guideline"
+        app:layout_constraintStart_toEndOf="@id/time_start_label"
+        app:layout_constraintTop_toBottomOf="@id/meeting_date" />
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/time_picker"
+        tools:ignore="MissingConstraints" />
+    <ImageView
+        android:id="@+id/reset_time"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:padding="4dp"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:clickable="true"
+        android:contentDescription="@string/delete_cross"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@id/meeting_start_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icons_guideline"
+        app:layout_constraintTop_toTopOf="@id/meeting_start_time"
+        app:srcCompat="@drawable/reset"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <!-- heure de FIN la réunion sans bouton  widget heure -->
+    <TextView
+        android:id="@+id/time_end_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/meeting_end"
+        android:textAlignment="viewStart"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/meeting_end_time"
+        app:layout_constraintEnd_toStartOf="@id/labels_guideline"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/meeting_end_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="11:15"
+        android:textAlignment="viewStart"
+        android:minHeight="24sp"
+        android:textSize="18sp"
+        android:layout_marginStart="2sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/time_end_label"
+        app:layout_constraintTop_toBottomOf="@id/meeting_start_time" />
+
+    <TextView
+        android:id="@+id/duration_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/meeting_duration"
+        android:textAlignment="viewStart"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/meeting_duration"
+        app:layout_constraintEnd_toStartOf="@id/labels_guideline"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/meeting_duration"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+
+        android:text="45"
+        android:textAlignment="viewStart"
+        app:layout_constraintStart_toEndOf="@id/labels_guideline"
+        app:layout_constraintTop_toBottomOf="@id/time_end_label" />
+
+    <TextView
+        android:id="@+id/duration_unit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/units_mn"
+        android:textAlignment="viewStart"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/meeting_duration"
+        app:layout_constraintStart_toEndOf="@id/meeting_duration"
+        app:layout_constraintTop_toBottomOf="@id/time_end_label" />
+
+
+    <ImageView
+        android:id="@+id/reset_duration"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:layout_marginStart="8dp"
+        android:clickable="true"
+        android:contentDescription="@string/delete_cross"
+        android:focusable="true"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/meeting_duration"
+
+        app:layout_constraintStart_toEndOf="@id/duration_unit"
+        app:layout_constraintTop_toTopOf="@id/meeting_duration"
+        app:srcCompat="@drawable/reset"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/room_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:text="@string/meeting_room"
+
+        android:textAlignment="viewStart"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/meeting_room_spinner"
+        app:layout_constraintEnd_toStartOf="@id/labels_guideline"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <Spinner
+        android:id="@+id/meeting_room_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+
+        android:text="Ile de France"
+        android:textAlignment="viewStart"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@id/icons_guideline"
+        app:layout_constraintStart_toEndOf="@id/labels_guideline"
+        app:layout_constraintTop_toBottomOf="@id/meeting_duration" />
+
+    <TextView
+        android:id="@+id/meeting_room"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ile de France"
+        android:visibility="gone"
+        android:textAlignment="viewStart"
+        app:layout_constraintStart_toEndOf="@id/labels_guideline"
+        app:layout_constraintEnd_toStartOf="@id/icons_guideline"
+        app:layout_constraintTop_toBottomOf="@id/meeting_duration" />
+
+    <ImageView
+        android:id="@+id/clear_room"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="16dp"
+
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/meeting_room_spinner"
+        app:layout_constraintBottom_toBottomOf="@id/meeting_room_spinner"
+
+        app:layout_constraintStart_toEndOf="@id/icons_guideline"
+        app:srcCompat="@drawable/ic_dialog_close_light" />
+
+
+    <TextView
+        android:id="@+id/users_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/meeting_users"
+        android:textAlignment="viewStart"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/meeting_users"
+        app:layout_constraintEnd_toStartOf="@id/labels_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/meeting_users" />
+
+    <fr.waltermarighetto.reunion.controller.MultiSpinner
+
+
+        android:id="@+id/meeting_users"
+
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dropDownWidth="match_parent"
+
+
+        android:isScrollContainer="true"
+        android:minHeight="48dp"
+        android:spinnerMode="dialog"
+        android:text="User1@lamzone.com, User2..."
+        android:textAlignment="viewStart"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/okcancel_barrier"
+        app:layout_constraintEnd_toStartOf="@id/icons_guideline"
+        app:layout_constraintStart_toStartOf="@id/labels_guideline"
+        app:layout_constraintTop_toBottomOf="@id/meeting_room_spinner"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageView
+        android:id="@+id/clear_users"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:padding="18dp"
+
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/meeting_room"
+        app:layout_constraintStart_toEndOf="@id/icons_guideline"
+        app:srcCompat="@drawable/ic_dialog_close_light" />
+
+    <TextView
+        android:id="@+id/users_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:text="User1@lamzone.com, User2..."
+
+        app:layout_constraintTop_toBottomOf="@id/meeting_users"
+        app:layout_constraintBottom_toTopOf="@id/icons_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <androidx.constraintlayout.widget.Group
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/okcancel_barrier"
+        app:layout_constraintBottom_toBottomOf="parent">
+    </androidx.constraintlayout.widget.Group>
+    <TextView
+        android:id="@+id/create_ok"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:textSize="18dp"
+        android:textColor="@color/purple_700"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/ok"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/okcancel_barrier"
+        app:layout_constraintEnd_toStartOf="@id/create_reset" />
+
+    <TextView
+        android:id="@+id/create_reset"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:textSize="18dp"
+        android:textColor="@color/purple_700"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/reset_all"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/okcancel_barrier"
+        app:layout_constraintEnd_toStartOf="@id/create_cancel" />
+
+    <TextView
+        android:id="@+id/create_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="32dp"
+
+
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/cancel"
+        android:textAlignment="center"
+        android:textColor="@color/purple_700"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/okcancel_barrier" />
+
+
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/okcancel_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="meeting_users, users_label" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/labels_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="100dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/icons_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="40dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

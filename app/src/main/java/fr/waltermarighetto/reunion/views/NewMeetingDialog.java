@@ -1,13 +1,11 @@
-package fr.waltermarighetto.reunion.controller;
+package fr.waltermarighetto.reunion.views;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 
@@ -22,32 +20,28 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.fragment.app.Fragment;
 
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 
 import fr.waltermarighetto.reunion.R;
+import fr.waltermarighetto.reunion.controller.MainActivity;
+import fr.waltermarighetto.reunion.model.InitData;
 import fr.waltermarighetto.reunion.model.Meeting;
 import fr.waltermarighetto.reunion.model.Room;
 import fr.waltermarighetto.reunion.model.User;
 
-public class NewMeeting extends Dialog {
+public class NewMeetingDialog extends Dialog {
     TextView newMeetingCancel, newMeetingReset, newMeetingOK, meetingEndTime, meetingRoom;
     ImageView clearMeetingName, clearNewRoom, resetDate, resetTime, resetDuration, clearUsers;
     EditText meetingName, meetingDate, meetingTime, meetingDuration;
@@ -59,7 +53,7 @@ public class NewMeeting extends Dialog {
     public static Dialog newMeetingDialog;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public NewMeeting(Context context) throws IllegalAccessException, InstantiationException {
+    public NewMeetingDialog(Context context) throws IllegalAccessException, InstantiationException {
         super(context);
         newMeetingDialog = new Dialog(context);
         newMeetingDialog.setContentView(R.layout.dialog_new_meeting);
@@ -126,10 +120,10 @@ public class NewMeeting extends Dialog {
                 newMeetingCalendar.set(Calendar.YEAR, year);
                 newMeetingCalendar.set(Calendar.MONTH, monthOfYear);
                 newMeetingCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                meetingDate.setText(InitResources.sdf.format(newMeetingCalendar.getTime()));
+                meetingDate.setText(InitData.sdf.format(newMeetingCalendar.getTime()));
                 mStart = LocalDateTime.of(year, monthOfYear, dayOfMonth, mStart.getHour(), mStart.getMinute(), mStart.getSecond());
                 mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-                meetingEndTime.setText(mEnd.toLocalTime().format(InitResources.dtfTime));
+                meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
 
 
                 resetDate.setVisibility(View.VISIBLE);
@@ -172,7 +166,7 @@ public class NewMeeting extends Dialog {
         });
 
         resetDate.setOnClickListener(fv -> {
-            meetingDate.setText(LocalDateTime.now().toLocalDate().format(InitResources.dtfDate));
+            meetingDate.setText(LocalDateTime.now().toLocalDate().format(InitData.dtfDate));
             //      Mettre à jour mStart sans perdre l'heure'
 
             mStart = LocalDateTime.of(LocalDateTime.now().getYear(),
@@ -184,11 +178,11 @@ public class NewMeeting extends Dialog {
             resetDate.setVisibility(View.GONE);
             // on calcule date de fin et on met à jour la vue
             mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-            meetingEndTime.setText(mEnd.toLocalTime().format(InitResources.dtfTime));
+            meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
 
         });
         resetTime.setOnClickListener(fv -> {
-            meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitResources.dtfTime));
+            meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitData.dtfTime));
             //mettre à jour l'heure sans perdre la date
 
             mStart = LocalDateTime.of(mStart.getYear(),
@@ -201,7 +195,7 @@ public class NewMeeting extends Dialog {
 
             // on calcule date de fin et on met à jour la vue
             mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-            meetingEndTime.setText(mEnd.toLocalTime().format(InitResources.dtfTime));
+            meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
 
         });
 
@@ -216,7 +210,7 @@ public class NewMeeting extends Dialog {
                 meetingTime.setText(hourOfDay + "h" + minute); // set the current time in text view
                 mStart = LocalDateTime.of(mStart.getYear(), mStart.getMonth(), mStart.getDayOfMonth(), hourOfDay, minute, 0);
                 mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-                meetingEndTime.setText(mEnd.toLocalTime().format(InitResources.dtfTime));
+                meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
                 resetTime.setVisibility(View.VISIBLE);
             }
         });
@@ -273,7 +267,7 @@ public class NewMeeting extends Dialog {
                 else resetDuration.setVisibility(View.VISIBLE);
                 // on calcule date de fin et on met à jour la vue
                 mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-                meetingEndTime.setText(mEnd.toLocalTime().format(InitResources.dtfTime));
+                meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
             }
         });
 
@@ -281,7 +275,7 @@ public class NewMeeting extends Dialog {
             meetingDuration.setText(newMeetingDialog.getContext().getString(R.string.meeting_average_duration));
             // on calcule date de fin et on met à jour la vue
             mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-            meetingEndTime.setText(mEnd.toLocalTime().format(InitResources.dtfTime));
+            meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
             resetDuration.setVisibility(View.GONE);
         });
 
@@ -295,7 +289,7 @@ public class NewMeeting extends Dialog {
 
         aA.add(newMeetingDialog.getContext().getString(R.string.none_room));  // String vide pour dire qu'on ne sélectionne aucune room
 
-        for (Room room : InitResources.mRoomsGlobal) aA.add(room.getName());
+        for (Room room : InitData.mRoomsGlobal) aA.add(room.getName());
 
         roomSpinner.setSelection(0); // par défaut rien de sélectionné
         clearNewRoom.setVisibility(View.GONE);
@@ -328,7 +322,7 @@ public class NewMeeting extends Dialog {
         List<String> usersNames = new ArrayList<String>();
         usersNames.add(""); // String vide pour dire qu'on ne sélectionne personne
         usersSpinner.setSelection(0); // par défaut rien de sélectionné
-        for (User user : InitResources.mUsersGlobal) usersNames.add(user.getUser());
+        for (User user : InitData.mUsersGlobal) usersNames.add(user.getUser());
 
         usersSpinner.setItems(usersNames, "Personne");
                 //, (MultiSpinner.MultiSpinnerListener) this);
@@ -380,7 +374,7 @@ public class NewMeeting extends Dialog {
             if (complete) {
                 Meeting currentMeeting = new Meeting();
                 currentMeeting.setName((meetingName.getText().toString()));
-                for (Room r : InitResources.mRoomsGlobal)
+                for (Room r : InitData.mRoomsGlobal)
                     if (r.getName().toString().equals(aA.getItem(roomSpinner.getSelectedItemPosition()).toString())) {
                         currentMeeting.setRoom(r);
                         break;
@@ -388,10 +382,11 @@ public class NewMeeting extends Dialog {
                 currentMeeting.setStart(mStart);
                 currentMeeting.setEnd(mEnd);
 // a revoir en fonction des personnes sélectionnées
-                currentMeeting.setUsers(InitResources.mUsersGlobal);
-                InitResources.mMeetingsGlobal.add(currentMeeting);
+                currentMeeting.setUsers(InitData.mUsersGlobal);
+                InitData.mMeetingsGlobal.add(currentMeeting);
                 newMeetingDialog.dismiss();
                 resetNewMeeting();
+
 
 
             }
@@ -422,18 +417,18 @@ public class NewMeeting extends Dialog {
         meetingName.setText("");
         meetingName.setText(Html.fromHtml("<font color='red'>*</font>"));
         clearMeetingName.setVisibility(View.GONE);
-        meetingDate.setText(LocalDateTime.now().toLocalDate().format(InitResources.dtfDate));
+        meetingDate.setText(LocalDateTime.now().toLocalDate().format(InitData.dtfDate));
 
         mStart = LocalDateTime.now();
 
         resetDate.setVisibility(View.GONE);
-        meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitResources.dtfTime));
+        meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitData.dtfTime));
         resetTime.setVisibility(View.GONE);
         meetingDuration.setText(newMeetingDialog.getContext().getString(R.string.meeting_average_duration));
         resetDuration.setVisibility(View.GONE);
         mEnd = LocalDateTime.now().plusMinutes(Integer.parseInt(newMeetingDialog.getContext().getString(R.string.meeting_average_duration)));
 
-        meetingEndTime.setText(mEnd.toLocalTime().format(InitResources.dtfTime));
+        meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
         roomSpinner.setSelection(0); // par défaut rien de sélectionné
         clearNewRoom.setVisibility(View.GONE);
 

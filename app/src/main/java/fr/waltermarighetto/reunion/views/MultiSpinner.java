@@ -1,4 +1,4 @@
-package fr.waltermarighetto.reunion.controller;
+package fr.waltermarighetto.reunion.views;
 
 import android.content.Context;
 import android.content.DialogInterface;

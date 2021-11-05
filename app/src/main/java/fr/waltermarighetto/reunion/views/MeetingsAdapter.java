@@ -11,18 +11,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import java.time.LocalDate;
 import java.util.List;
 
 import fr.waltermarighetto.reunion.R;
-import fr.waltermarighetto.reunion.controller.FilterMeetings;
 import fr.waltermarighetto.reunion.model.Meeting;
-import fr.waltermarighetto.reunion.controller.InitResources;
+import fr.waltermarighetto.reunion.model.InitData;
 import fr.waltermarighetto.reunion.model.Room;
 import fr.waltermarighetto.reunion.model.User;
 
@@ -55,7 +51,7 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
     public void onBindViewHolder(@NonNull MeetingsViewHolder holder, int position) {
 
         holder.mTextMeeting.setText(aDataset.get(position).getName());
-        holder.mTextTime.setText(" - " + InitResources.dtfTime.format(aDataset.get(position).getStart()) + " - ");
+        holder.mTextTime.setText(" - " + InitData.dtfTime.format(aDataset.get(position).getStart()) + " - ");
         holder.mTextRoom.setText(aDataset.get(position).getRoom().getName());
         String s = "";
         for (User user : aDataset.get(position).getUsers())
@@ -64,8 +60,8 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
 
         Room ro = aDataset.get(position).getRoom();
 
-        for (int i = 0; i < InitResources.mRoomsGlobal.size(); i++) {
-            if (ro.getName().toString().equals( InitResources.mRoomsGlobal.get(i).getName().toString())) {
+        for (int i = 0; i < InitData.mRoomsGlobal.size(); i++) {
+            if (ro.getName().toString().equals( InitData.mRoomsGlobal.get(i).getName().toString())) {
             holder.mImageStatus.setBackgroundColor(roomColors[i]);
             break;}
         }

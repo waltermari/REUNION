@@ -283,7 +283,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/meeting_users" />
 
-    <fr.waltermarighetto.reunion.controller.MultiSpinner
+    <fr.waltermarighetto.reunion.views.MultiSpinner
 
 
         android:id="@+id/meeting_users"
@@ -326,7 +326,7 @@
         android:layout_height="wrap_content"
         android:visibility="visible"
         android:text="User1@lamzone.com, User2..."
-
+android:textAlignment="viewStart"
         app:layout_constraintTop_toBottomOf="@id/meeting_users"
         app:layout_constraintBottom_toTopOf="@id/icons_guideline"
         app:layout_constraintStart_toStartOf="parent"

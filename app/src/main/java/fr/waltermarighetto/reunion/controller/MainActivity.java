@@ -1,12 +1,8 @@
 package fr.waltermarighetto.reunion.controller;
 
-import static java.time.LocalDate.*;
-
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,21 +10,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.location.GnssAntennaInfo;
 import android.os.Build;
 import android.os.Bundle;
 
 import android.view.Menu;
 import android.view.MenuItem;
 
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -37,22 +29,17 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.atomic.AtomicReference;
 
 import fr.waltermarighetto.reunion.R;
+import fr.waltermarighetto.reunion.model.InitData;
 import fr.waltermarighetto.reunion.model.Meeting;
 import fr.waltermarighetto.reunion.model.Room;
-import fr.waltermarighetto.reunion.model.User;
 import fr.waltermarighetto.reunion.views.MeetingsAdapter;
-@SuppressLint({"NewApi", "ResourceType"})     //??
+import fr.waltermarighetto.reunion.views.NewMeetingDialog;
+
+@SuppressLint({"NewApi", "ResourceType"})
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MainActivity extends AppCompatActivity {
 
@@ -60,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Dialog filterMeetingsDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
-    LocalDate filterDate;
+
+
     String filterCalendar = new String();
-    List<String> filterRoom = new ArrayList<String>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -70,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new InitResources();
+        new InitData();
 
-        filterDate = null;
-        filterRoom.clear();
-        initRecyclerForMeetings(filterDate, filterRoom);
+        InitData.setFilterDate(null);
+        InitData.getFilterRoom().clear();
+        initRecyclerForMeetings();
 
         // Refresh avec SwipeRefreshLayout
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -82,26 +69,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
 
-                initRecyclerForMeetings(filterDate, filterRoom);
+                initRecyclerForMeetings();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
- //       Dialog newMeetingDial = new Dialog(this);
 
 
         FloatingActionButton floatingNewMeeting = findViewById(R.id.new_meeting);
         floatingNewMeeting.setOnClickListener(view -> {
             try {
-                new NewMeeting(this);
+                new NewMeetingDialog(this);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
                 e.printStackTrace();
             }
-            NewMeeting.newMeetingDialog.show();
+            NewMeetingDialog.newMeetingDialog.show();
 
-                    initRecyclerForMeetings(filterDate, filterRoom);
+ // trop tôt il faut l'activer sur OK                   initRecyclerForMeetings();
 
 
                 }
@@ -113,13 +98,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void initRecyclerForMeetings(LocalDate date, List<String> room) {
+    public  void initRecyclerForMeetings() {
+//LocalDate date, List<String> room
 
-        List<Meeting> meetings = new FilterMeetings().filterMeetings(date, room);
         RecyclerView mRecycler = findViewById(R.id.meetings_recycler_view);
-        MeetingsAdapter mA = new MeetingsAdapter(meetings);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecycler.setLayoutManager(layoutManager);
+        MeetingsAdapter mA = new MeetingsAdapter(new FilterMeetings().FilterMeetings());
+        mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mRecycler.setItemAnimator(new DefaultItemAnimator());
         mRecycler.setAdapter(mA);
 
@@ -150,8 +134,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView filterCalendarView, int year, int month, int day) {
 
-                filterDate = LocalDate.of(year, month+1, day);
-                filterDateEditText.setText(filterDate.format(InitResources.dtfDate));
+                InitData.setFilterDate(LocalDate.of(year, month+1, day));
+                filterDateEditText.setText(InitData.getFilterDate().format(InitData.dtfDate));
 
             }
         } );
@@ -165,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
         aA.add(getString(R.string.all_rooms));  // String vide pour dire qu'on ne sélectionne aucune room
 
-        for (Room room : InitResources.mRoomsGlobal) aA.add(room.getName());
+        for (Room room : InitData.mRoomsGlobal) aA.add(room.getName());
         filterRoomSpinner.setSelection(0); // par défaut rien de sélectionné
         clearRoom.setVisibility(View.GONE);
         filterRoomSpinner.setAdapter(aA);
@@ -198,19 +182,20 @@ public class MainActivity extends AppCompatActivity {
         //OK
         filterOKButton = filterMeetingsDialog.findViewById(R.id.filter_ok);
         filterOKButton.setOnClickListener(fv -> {
-            filterRoom.clear();
+            InitData.getFilterRoom().clear();
             String s = (String) filterRoomSpinner.getItemAtPosition(filterRoomSpinner.getSelectedItemPosition());
             if (!s.equals(getString(R.string.all_rooms))) {
-                filterRoom.add(s);
+                InitData.getFilterRoom().add(s);
                 clearRoom.setVisibility(View.VISIBLE);
             }
+
             //           if (filterCalendarView.callOnClick()) {};
 
             // filterDate = filterCalendarView.getDate();
             //         filterDate = (DateFormat.DATE_FIELD) filterDateEditText.getText().toString();
             Toast.makeText(MainActivity.this, "OK " + s, Toast.LENGTH_LONG).show();
             filterMeetingsDialog.dismiss();
-            initRecyclerForMeetings(filterDate, filterRoom);
+            initRecyclerForMeetings();
 
         });
 
@@ -218,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
         clearRoom.setOnClickListener(fv -> {
 
             filterRoomSpinner.setSelection(0);
-            filterRoom.clear();
+            InitData.getFilterRoom().clear();
             clearRoom.setVisibility(View.GONE);
         });
 
@@ -227,12 +212,11 @@ public class MainActivity extends AppCompatActivity {
         filterClearButton = filterMeetingsDialog.findViewById(R.id.filter_clear);
         filterClearButton.setOnClickListener(fv -> {
 
-            //      filterCalendar = null;
-            //           filterDateEditText.setText("");
+
             filterRoomSpinner.setSelection(0);
             clearRoom.setVisibility(View.GONE);
-            filterRoom.clear();
-            filterDate = null;
+            InitData.getFilterRoom().clear();
+            InitData.setFilterDate(null);
 
         });
 

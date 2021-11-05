@@ -1,4 +1,4 @@
-package fr.waltermarighetto.reunion.controller;
+package fr.waltermarighetto.reunion.model;
 
 import static java.time.LocalDateTime.now;
 
@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -22,7 +23,10 @@ import fr.waltermarighetto.reunion.model.Room;
 import fr.waltermarighetto.reunion.model.User;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class InitResources {
+public class InitData {
+
+    public static LocalDate filterDate;
+    private static List<String> filterRoom = new ArrayList<String>();
 
     public static List<User> mUsersGlobal;
     public static List<Room> mRoomsGlobal;
@@ -33,10 +37,7 @@ public class InitResources {
     public static DateTimeFormatter dtfDateShort = DateTimeFormatter.ofPattern("dd-MM-YYYY");
     public static DateTimeFormatter dtfTime = DateTimeFormatter.ofPattern("HH'h'mm");
     public static SimpleDateFormat sdf = new SimpleDateFormat("EEEE dd/MM/yy", Locale.FRANCE);
-    //   public  InitRessources(TextView mTextV) {
-    //      String testsAffiches = new String();
-    //       mTextV.findViewById(R.id.Boite_Brouillon);
-//
+
     {
 
         mUsersGlobal = new ArrayList<User>();
@@ -60,10 +61,6 @@ public class InitResources {
             mUsersGlobal.add(us);
         }
 
-        //           for (User user : mUsersGlobal) {
-        //               testsAffiches = testsAffiches+user.getUser()+"\n";
-        //               System.out.println(user.getUser());
-        //           }
 
 // on crée la liste globale des salles de réunions
 
@@ -77,15 +74,6 @@ public class InitResources {
 
             mRoomsGlobal.add(ro);
         }
-
-        //           for (Room room : mRoomsGlobal) {
-        //               testsAffiches = testsAffiches+room.getName()+"\n";
-        //               System.out.println(room.getName());
-        //           }
-//            testsAffiches = testsAffiches+"nombre d'utilisateurs : " + mUsersGlobal.size() + " nombre de salles : "
-//                    + mRoomsGlobal.size()+"\n";
-//            System.out.println("nombre d'utilisateurs : " + mUsersGlobal.size() + " nombre de salles : "
-//                    + mRoomsGlobal.size());
 
 //	           On initialise la liste des réunions en se calant sur la date du jour pour mieux tester
 
@@ -362,27 +350,22 @@ public class InitResources {
 
         }
 
+    }
+    public static LocalDate getFilterDate() {
+        return filterDate;
+    }
 
-        //          for (Meeting meeting : mMeetingsGlobal) {
-        //              testsAffiches = testsAffiches+ "Réunion :" + meeting.getName() + " avec :";
-        //               System.out.println(" Réunion :" + meeting.getName() + " avec :");
-        //               for (User user : meeting.getUsers()) {
-        //                  testsAffiches= testsAffiches+user.getUser()+"";
-        //                   System.out.println(user.getUser());
-        //                }
-        //                testsAffiches= testsAffiches+"En salle : " + meeting.getRoom().getName() + ". Début le : "
-        //                       + dtfDate.format(meeting.getStart()) + " à " + dtfTime.format(meeting.getStart())
-        //                      + (ChronoUnit.SECONDS.between(meeting.getStart(), meeting.getEnd()) + 5) / 60
-        //                       + " minutes"+"\n";
-        //              System.out.println("En salle : " + meeting.getRoom().getName() + ". Début le : "
-        //                      + dtfDate.format(meeting.getStart()) + " à " + dtfTime.format(meeting.getStart())
-        //                     + " fin à : " + dtfTime.format(meeting.getEnd()) + " durée : "
-        //                    + (ChronoUnit.SECONDS.between(meeting.getStart(), meeting.getEnd()) + 5) / 60
-        //                 + " minutes");
+    public static void setFilterDate(LocalDate date) {
+        filterDate = date;
+    }
 
-        //    }
-        //      }
-        //       mTextV.setText(testsAffiches);
+    public static List<String> getFilterRoom() {
+        return filterRoom;
+    }
 
+    public static void setFilterRoom(List<String> rooms) {
+        if (rooms == null)
+            filterRoom.clear();
+        else filterRoom = rooms;
     }
 }

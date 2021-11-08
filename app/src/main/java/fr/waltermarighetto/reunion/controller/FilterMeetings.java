@@ -4,6 +4,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -11,32 +12,36 @@ import java.util.List;
 
 import fr.waltermarighetto.reunion.model.InitData;
 import fr.waltermarighetto.reunion.model.Meeting;
-import fr.waltermarighetto.reunion.model.Room;
-import fr.waltermarighetto.reunion.views.MeetingsAdapter;
+
+
 
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class FilterMeetings {
 
-    private LocalDateTime timeToUseForChecks = LocalDateTime.now();
-    private List<Meeting> meetings = new ArrayList<Meeting>();
+    public static LocalDate filterDate = null;
+    private static List<String> filterRoom = new ArrayList<String>();
+
+    private static LocalDateTime timeToUseForChecks = LocalDateTime.now();
+    private static List<Meeting> meetings = new ArrayList<Meeting>();
 
 
-    public ArrayList<Meeting> FilterMeetings() {
+    public static List<Meeting> FilterMeetings() {
 
+        meetings.clear();
 
         // on supprime de la liste tous les meetings qui finissent avant timeToUseForChecks
         // (now si pas de filtre par date, 00h00 de la date du filtre sinon)
-        if (InitData.filterDate == null)
+        if (filterDate == null)
             timeToUseForChecks = LocalDateTime.now();
-        else timeToUseForChecks = (LocalDateTime) InitData.filterDate.atStartOfDay();
+        else timeToUseForChecks = (LocalDateTime) filterDate.atStartOfDay();
 
         for (fr.waltermarighetto.reunion.model.Meeting meet : InitData.mMeetingsGlobal) {
             if (meet.getEnd().isAfter(timeToUseForChecks)) { //le meeting n'est pas termminé
 
-                if (InitData.filterDate == null || InitData.filterDate.compareTo(meet.getStart().toLocalDate()) ==0) {   // le meeting a une bonne date
-                    if (InitData.getFilterRoom().size() > 0) { //on filtre par salle
-                        for (String ro : InitData.getFilterRoom()) {
+                if (filterDate == null || filterDate.compareTo(meet.getStart().toLocalDate()) ==0) {   // le meeting a une bonne date
+                    if (filterRoom.size() > 0) { //on filtre par salle
+                        for (String ro : filterRoom) {
                             if (meet.getRoom().getName().equals(ro))
                                 meetings.add((Meeting) meet);
                         }
@@ -47,8 +52,25 @@ public class FilterMeetings {
             }
 
         }
-        new MeetingsAdapter(meetings);
+
         return (ArrayList<Meeting>) meetings;
+    }
+    public static LocalDate getFilterDate() {
+        return filterDate;
+    }
+
+    public static void setFilterDate(LocalDate date) {
+        filterDate = date;
+    }
+
+    public static List<String> getFilterRoom() {
+        return filterRoom;
+    }
+
+    public static void setFilterRoom(List<String> rooms) {
+        if (rooms == null)
+            filterRoom.clear();
+        else filterRoom = rooms;
     }
 }
 

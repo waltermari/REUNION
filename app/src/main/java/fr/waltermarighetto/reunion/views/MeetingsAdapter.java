@@ -23,7 +23,7 @@ import fr.waltermarighetto.reunion.model.Room;
 import fr.waltermarighetto.reunion.model.User;
 
 public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MeetingsViewHolder> {
-    private final List<Meeting> aDataset; 
+    private  List<Meeting> aDataset;
 
 
     // Tableau de couleur des salles
@@ -33,9 +33,48 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
 
     public MeetingsAdapter(List<Meeting> dataset ) {
         this.aDataset = dataset;
+ //       notifyDataSetChanged();
     }
 
+    public void meetingsAdapterAdd(Meeting meeting ) {
+        if (meeting != null) {
+            this.aDataset.add(meeting);
+ //           notifyDataSetChanged();
+        }
+    }
+    public void meetingsAdapterRemove( Meeting meeting ) {
+        if (meeting != null) {
+            this.aDataset.remove(meeting);
+ //          notifyDataSetChanged();
+        }
+    }
+    public void meetingsAdapterUpdate(List<Meeting> dataset) {
+        // on enlève de la lsite finale les meetings qui ne sont pas dans la liste d'entrée,
+        // puis on rajoute les nouveaux
+        boolean toRemove, toAdd;
+        for (Meeting metTarget : aDataset) {
+            toRemove = true;
+            for (Meeting metSource: dataset) {
+                if(metTarget.equals(metSource)) {
+                    toRemove = false;
+                    break; // le meeting doit être conservé dans la liste
+                }
+                if (toRemove) aDataset.remove(metTarget);
+            }
+        }
+        for (Meeting metSource : dataset) {
+            toAdd = true;
+            for (Meeting metTarget : aDataset) {
+                if (metSource.equals(metTarget)) {
+                    toAdd = false;
+                    break; //le meeting est déjà en liste, on ne le rajoute pas
+                }
+                if (toAdd) aDataset.add(metSource);
+            }
+        }
 
+ //       notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public MeetingsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -62,36 +101,38 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
 
         for (int i = 0; i < InitData.mRoomsGlobal.size(); i++) {
             if (ro.getName().toString().equals( InitData.mRoomsGlobal.get(i).getName().toString())) {
-            holder.mImageStatus.setBackgroundColor(roomColors[i]);
-            break;}
+                holder.mImageStatus.setBackgroundColor(roomColors[i]);
+                break;}
         }
 
-  //      holder.mImageStatus.getDrawable();
+        //      holder.mImageStatus.getDrawable();
         holder.mImageRemove.forceLayout();
 
     }
-        @Override
-        public int getItemCount () {
-            return aDataset.size();
+    @Override
+    public int getItemCount () {
+        return aDataset.size();
+    }
+
+    public class MeetingsViewHolder extends RecyclerView.ViewHolder {
+        ImageView mImageStatus;
+        ImageView mImageRemove;
+        TextView mTextMeeting;
+        TextView mTextTime;
+        TextView mTextRoom;
+        TextView mTextUsers;
+
+        public MeetingsViewHolder(@NonNull View itemView) {
+            super(itemView);
+            mImageStatus = itemView.findViewById(R.id.image_status);
+            mImageRemove = itemView.findViewById(R.id.image_remove);
+            mTextMeeting = itemView.findViewById(R.id.item_meeting);
+            mTextTime = itemView.findViewById(R.id.item_time);
+            mTextRoom = itemView.findViewById(R.id.item_room);
+            mTextUsers = itemView.findViewById(R.id.item_users);
         }
-
-        public class MeetingsViewHolder extends RecyclerView.ViewHolder {
-            ImageView mImageStatus;
-            ImageView mImageRemove;
-            TextView mTextMeeting;
-            TextView mTextTime;
-            TextView mTextRoom;
-            TextView mTextUsers;
-
-            public MeetingsViewHolder(@NonNull View itemView) {
-                super(itemView);
-                mImageStatus = itemView.findViewById(R.id.image_status);
-                mImageRemove = itemView.findViewById(R.id.image_remove);
-                mTextMeeting = itemView.findViewById(R.id.item_meeting);
-                mTextTime = itemView.findViewById(R.id.item_time);
-                mTextRoom = itemView.findViewById(R.id.item_room);
-                mTextUsers = itemView.findViewById(R.id.item_users);
-            }
+    }
+    public void onChange() {
+               String s ="Bonsoir";
         }
-
 }

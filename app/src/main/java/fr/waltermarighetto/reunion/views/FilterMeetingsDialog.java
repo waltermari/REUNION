@@ -1,4 +1,4 @@
-package fr.waltermarighetto.reunion.controller;
+package fr.waltermarighetto.reunion.views;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -29,6 +29,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.time.LocalDate;
 
 import fr.waltermarighetto.reunion.R;
+import fr.waltermarighetto.reunion.controller.FilterMeetings;
+import fr.waltermarighetto.reunion.controller.MainActivity;
 import fr.waltermarighetto.reunion.model.InitData;
 import fr.waltermarighetto.reunion.model.Room;
 import fr.waltermarighetto.reunion.views.MeetingsAdapter;
@@ -37,10 +39,11 @@ import fr.waltermarighetto.reunion.views.NewMeetingDialog;
 public class FilterMeetingsDialog extends Dialog {
     TextView filterCancelButton, filterOKButton, filterClearButton;
     ImageView clearRoom, clearDate;
+    public static Dialog filterMeetingsDialog;
     @RequiresApi(api = Build.VERSION_CODES.O)
     public  FilterMeetingsDialog(@NonNull Context context) {
         super(context);
-        Dialog filterMeetingsDialog = new Dialog(context);
+     filterMeetingsDialog = new Dialog(context);
         filterMeetingsDialog.setContentView(R.layout.dialog_filter_meetings);
 
             CalendarView filterCalendarView;
@@ -55,8 +58,8 @@ public class FilterMeetingsDialog extends Dialog {
                 @Override
                 public void onSelectedDayChange(@NonNull CalendarView filterCalendarView, int year, int month, int day) {
 
-                    InitData.setFilterDate(LocalDate.of(year, month+1, day));
-                    filterDateEditText.setText(InitData.getFilterDate().format(InitData.dtfDate));
+                    FilterMeetings.setFilterDate(LocalDate.of(year, month+1, day));
+                    filterDateEditText.setText(FilterMeetings.getFilterDate().format(InitData.dtfDate));
 
                 }
             } );
@@ -103,16 +106,18 @@ public class FilterMeetingsDialog extends Dialog {
             //OK
             filterOKButton = filterMeetingsDialog.findViewById(R.id.filter_ok);
             filterOKButton.setOnClickListener(fv -> {
-                InitData.getFilterRoom().clear();
+                FilterMeetings.getFilterRoom().clear();
                 String s = (String) filterRoomSpinner.getItemAtPosition(filterRoomSpinner.getSelectedItemPosition());
                 if (!s.equals(context.getString(R.string.all_rooms))) {
-                    InitData.getFilterRoom().add(s);
+                    FilterMeetings.getFilterRoom().add(s);
                     clearRoom.setVisibility(View.VISIBLE);
                 }
 
                 Toast.makeText(context, "OK " + s, Toast.LENGTH_LONG).show();
+                FilterMeetings.FilterMeetings();
                 filterMeetingsDialog.dismiss();
-//                initRecyclerForMeetings();
+
+               MainActivity.mMeetingsAdapter.notifyDataSetChanged();
 
             });
 
@@ -120,7 +125,7 @@ public class FilterMeetingsDialog extends Dialog {
             clearRoom.setOnClickListener(fv -> {
 
                 filterRoomSpinner.setSelection(0);
-                InitData.getFilterRoom().clear();
+                FilterMeetings.getFilterRoom().clear();
                 clearRoom.setVisibility(View.GONE);
             });
 
@@ -132,8 +137,8 @@ public class FilterMeetingsDialog extends Dialog {
 
                 filterRoomSpinner.setSelection(0);
                 clearRoom.setVisibility(View.GONE);
-                InitData.getFilterRoom().clear();
-                InitData.setFilterDate(null);
+                FilterMeetings.getFilterRoom().clear();
+                FilterMeetings.setFilterDate(null);
 
             });
 

@@ -6,6 +6,7 @@ import android.app.Dialog;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 
@@ -35,6 +36,7 @@ import java.util.List;
 
 
 import fr.waltermarighetto.reunion.R;
+import fr.waltermarighetto.reunion.controller.FilterMeetings;
 import fr.waltermarighetto.reunion.controller.MainActivity;
 import fr.waltermarighetto.reunion.model.InitData;
 import fr.waltermarighetto.reunion.model.Meeting;
@@ -42,13 +44,14 @@ import fr.waltermarighetto.reunion.model.Room;
 import fr.waltermarighetto.reunion.model.User;
 
 public class NewMeetingDialog extends Dialog {
-    TextView newMeetingCancel, newMeetingReset, newMeetingOK, meetingEndTime, meetingRoom;
+    TextView newMeetingCancel, newMeetingReset, newMeetingOK, meetingEndTime, mandatoryRoom;
     ImageView clearMeetingName, clearNewRoom, resetDate, resetTime, resetDuration, clearUsers;
     EditText meetingName, meetingDate, meetingTime, meetingDuration;
     LocalDateTime mStart;
     LocalDateTime mEnd;
     TimePicker newMeetingTimePicker;
     Spinner roomSpinner;
+    MultiSpinner usersSpinner;
 
     public static Dialog newMeetingDialog;
 
@@ -63,19 +66,10 @@ public class NewMeetingDialog extends Dialog {
     }
 
 
-    //   public static void dialogNewMeetingDisplay() {
-//        newMeetingDialog.show();
-    //  }
-
-
-///// début
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void createDialogNewMeeting() throws InstantiationException, IllegalAccessException {
+    public void createDialogNewMeeting() {
 
-        //       newMeetingDialog.setContentView(R.layout.dialog_new_meeting);
-//  Nom du Meeting
+// meeting Name
         meetingName = newMeetingDialog.findViewById(R.id.meeting_name);
         clearMeetingName = newMeetingDialog.findViewById(R.id.clear_meeting_name);
 
@@ -90,19 +84,20 @@ public class NewMeetingDialog extends Dialog {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!meetingName.getText().toString().isEmpty())
+                if (!meetingName.getText().toString().isEmpty()) {
                     clearMeetingName.setVisibility(View.VISIBLE);
-                else
-                    clearMeetingName.setVisibility(View.GONE);
+                    meetingName.setBackgroundColor(Color.alpha(0));
+                }   else  clearMeetingName.setVisibility(View.GONE);
             }
         });
 
         clearMeetingName.setOnClickListener(fv -> {
             meetingName.setText("");
+            meetingName.setBackgroundColor(Color.alpha(0));
             clearMeetingName.setVisibility(View.GONE);
         });
 
-// Gestion Jour, heure  début, fin et durée
+// Gestion Jour, heure de  début, heure de fin et durée en minutes
 
         meetingDate = newMeetingDialog.findViewById(R.id.meeting_date);
         resetDate = newMeetingDialog.findViewById(R.id.reset_date);
@@ -113,29 +108,32 @@ public class NewMeetingDialog extends Dialog {
         meetingEndTime = newMeetingDialog.findViewById(R.id.meeting_end_time);
 
 
+// Date du meeting
+
         Calendar newMeetingCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 newMeetingCalendar.set(Calendar.YEAR, year);
                 newMeetingCalendar.set(Calendar.MONTH, monthOfYear);
                 newMeetingCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 meetingDate.setText(InitData.sdf.format(newMeetingCalendar.getTime()));
-                mStart = LocalDateTime.of(year, monthOfYear, dayOfMonth, mStart.getHour(), mStart.getMinute(), mStart.getSecond());
-                mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-                meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
-
-
+                // on change la date sans changer l'heure
+                mStart = LocalDateTime.of(year, monthOfYear+1, dayOfMonth, mStart.getHour(),
+                        mStart.getMinute(), mStart.getSecond());
+                // on calcule la date et heure de fin en fonction de la durée de la réunion
+                endTimeCalculation();
+                // on positionne le bouton de réinitialisation de la date
                 resetDate.setVisibility(View.VISIBLE);
             }
         };
 
         meetingDate.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
                     new DatePickerDialog(meetingDate.getContext(),
                             date,
                             newMeetingCalendar.get(Calendar.YEAR),
@@ -144,30 +142,12 @@ public class NewMeetingDialog extends Dialog {
                     return (true);
                 }
                 return (false);
-
             }
-
-
-            public boolean performClick(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
-                    new DatePickerDialog(meetingDate.getContext(),
-                            date,
-                            newMeetingCalendar.get(Calendar.YEAR),
-                            newMeetingCalendar.get(Calendar.MONTH),
-                            newMeetingCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                    return (true);
-                }
-                return (false);
-
-            }
-
-
         });
 
         resetDate.setOnClickListener(fv -> {
             meetingDate.setText(LocalDateTime.now().toLocalDate().format(InitData.dtfDate));
-            //      Mettre à jour mStart sans perdre l'heure'
+            //   mStart avec date réinitialisée et heure conservée
 
             mStart = LocalDateTime.of(LocalDateTime.now().getYear(),
                     LocalDateTime.now().getMonth(),
@@ -176,45 +156,22 @@ public class NewMeetingDialog extends Dialog {
                     mStart.getMinute(),
                     0);
             resetDate.setVisibility(View.GONE);
-            // on calcule date de fin et on met à jour la vue
-            mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-            meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
+            endTimeCalculation();
 
         });
-        resetTime.setOnClickListener(fv -> {
-            meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitData.dtfTime));
-            //mettre à jour l'heure sans perdre la date
-
-            mStart = LocalDateTime.of(mStart.getYear(),
-                    mStart.getMonth(),
-                    mStart.getDayOfMonth(),
-                    LocalDateTime.now().getHour(),
-                    LocalDateTime.now().getMinute(),
-                    0);
-            resetTime.setVisibility(View.GONE);
-
-            // on calcule date de fin et on met à jour la vue
-            mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-            meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
-
-        });
-
-
-// Time picker
+// Heure du meeting
         newMeetingTimePicker = newMeetingDialog.findViewById(R.id.time_picker);
-        newMeetingTimePicker.setIs24HourView(true);
-
+        newMeetingTimePicker.setIs24HourView(true); // à mettre peut-être dans le profil utilisateur ou lié à la locale
         newMeetingTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                meetingTime.setText(hourOfDay + "h" + minute); // set the current time in text view
-                mStart = LocalDateTime.of(mStart.getYear(), mStart.getMonth(), mStart.getDayOfMonth(), hourOfDay, minute, 0);
-                mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-                meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
+                meetingTime.setText(hourOfDay + "h" + minute);
+                mStart = LocalDateTime.of(mStart.getYear(), mStart.getMonth(), mStart.getDayOfMonth(),
+                        hourOfDay, minute, 0);
+                endTimeCalculation();
                 resetTime.setVisibility(View.VISIBLE);
             }
         });
-
 
         TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -223,17 +180,14 @@ public class NewMeetingDialog extends Dialog {
                 newMeetingTimePicker.setMinute(minute);
                 meetingTime.setText(newMeetingTimePicker.getHour() + "h" + newMeetingTimePicker.getMinute());
                 resetTime.setVisibility(View.VISIBLE);
-
             }
         };
-
 
         meetingTime.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
                     new TimePickerDialog(meetingTime.getContext(),
                             timeSetListener,
                             newMeetingTimePicker.getHour(),
@@ -241,108 +195,112 @@ public class NewMeetingDialog extends Dialog {
                     return (true);
                 }
                 return (false);
-
-
             }
         });
 
+        resetTime.setOnClickListener(fv -> {
+            meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitData.dtfTime));
+            mStart = LocalDateTime.of(mStart.getYear(),
+                    mStart.getMonth(),
+                    mStart.getDayOfMonth(),
+                    LocalDateTime.now().getHour(),
+                    LocalDateTime.now().getMinute(),
+                    0);
+            resetTime.setVisibility(View.GONE);
+            endTimeCalculation();
+        });
 
-// Duration
+// Meeting Duration
 
         meetingDuration.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // ajouter la durée à l'heure de début pour calculer l'heure de fin
 
-                if (meetingDuration.getText().toString().equals(newMeetingDialog.getContext().getString(R.string.meeting_average_duration)))
+                if (meetingDuration.getText().toString().equals(newMeetingDialog.getContext()
+                        .getString(R.string.meeting_average_duration)))
                     resetDuration.setVisibility(View.GONE);
                 else resetDuration.setVisibility(View.VISIBLE);
-                // on calcule date de fin et on met à jour la vue
-                mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-                meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
+                endTimeCalculation();
             }
         });
 
         resetDuration.setOnClickListener(fv -> {
             meetingDuration.setText(newMeetingDialog.getContext().getString(R.string.meeting_average_duration));
-            // on calcule date de fin et on met à jour la vue
-            mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-            meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
+            endTimeCalculation();
             resetDuration.setVisibility(View.GONE);
         });
 
 
 // Gestion de la salle de réunion
-        meetingRoom = newMeetingDialog.findViewById(R.id.meeting_room);
+
         roomSpinner = newMeetingDialog.findViewById(R.id.meeting_room_spinner);
         clearNewRoom = newMeetingDialog.findViewById(R.id.clear_room);
+        mandatoryRoom = newMeetingDialog.findViewById(R.id.mandatoryRoom);
 
-        ArrayAdapter<String> aA = new ArrayAdapter<String>(newMeetingDialog.getContext(), android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> roomPicklistAdaptor = new ArrayAdapter<String>(newMeetingDialog.getContext(),
+                android.R.layout.simple_spinner_item);
 
-        aA.add(newMeetingDialog.getContext().getString(R.string.none_room));  // String vide pour dire qu'on ne sélectionne aucune room
-
-        for (Room room : InitData.mRoomsGlobal) aA.add(room.getName());
+        roomPicklistAdaptor.add(newMeetingDialog.getContext().getString(R.string.none_room));  // String vide pour dire qu'on ne sélectionne aucune room
+        for (Room room : InitData.mRoomsGlobal) roomPicklistAdaptor.add(room.getName());
 
         roomSpinner.setSelection(0); // par défaut rien de sélectionné
+        mandatoryRoom.setVisibility(View.VISIBLE);
         clearNewRoom.setVisibility(View.GONE);
-        roomSpinner.setAdapter(aA);
+        roomSpinner.setAdapter(roomPicklistAdaptor);
 
-        // juste après avoir sélectionné une salle de réunion dans le spinner, on positionne l'icone delete room
-
+        // juste après avoir sélectionné une salle de réunion dans le spinner,
+        // on positionne l'icone delete room et le champ mandatoryRoom
         roomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (roomSpinner.getSelectedItemPosition() == 0)
+                if (roomSpinner.getSelectedItemPosition() == 0) {
                     clearNewRoom.setVisibility(View.GONE);
-
-                else clearNewRoom.setVisibility(View.VISIBLE);
+                    mandatoryRoom.setVisibility(View.VISIBLE);
+                } else {
+                    clearNewRoom.setVisibility(View.VISIBLE);
+                    mandatoryRoom.setVisibility(View.GONE);
+                    roomSpinner.setBackgroundColor(Color.alpha(0));
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // code à écrire au cas où on agit sur rien sélectionné
             }
-
         });
+
+        clearNewRoom.setOnClickListener(fv -> {
+            roomSpinner.setSelection(0); // par défaut rien de sélectionné
+            clearNewRoom.setVisibility(View.GONE);
+            mandatoryRoom.setVisibility(View.VISIBLE);
+            roomSpinner.setBackgroundColor(Color.alpha(0));
+        });
+
 //////////////////////////////////////
         // gestion des utilisateurs avec MultisSpiner
 
-        MultiSpinner usersSpinner;
 
         usersSpinner = newMeetingDialog.findViewById(R.id.meeting_users);
         clearUsers = newMeetingDialog.findViewById(R.id.clear_users);
+
         List<String> usersNames = new ArrayList<String>();
         usersNames.add(""); // String vide pour dire qu'on ne sélectionne personne
-        usersSpinner.setSelection(0); // par défaut rien de sélectionné
+
         for (User user : InitData.mUsersGlobal) usersNames.add(user.getUser());
 
         usersSpinner.setItems(usersNames, "Personne");
-                //, (MultiSpinner.MultiSpinnerListener) this);
-
-        //         ArrayAdapter<String> aAUsers = new ArrayAdapter<String>(this, android.R.layout.select_dialog_multichoice);
-
-//        aAUsers.add("");  // String vide pour dire qu'on ne sélectionne personne
-
-//        for (User user : InitResources.mUsersGlobal) aAUsers.add(user.getUser());
-
-        clearUsers.setVisibility(View.GONE);
-//              usersSpinner.setAdapter(aAUsers);
 
         // juste après avoir sélectionné une salle de réunion dans le spinner, on positionne l'icone delete room
-
-
         usersSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if (usersSpinner.getSelectedItemPosition() == 0)
+
                     clearUsers.setVisibility(View.GONE);
                 else clearUsers.setVisibility(View.VISIBLE);
             }
@@ -354,13 +312,15 @@ public class NewMeetingDialog extends Dialog {
 
 
         });
-
+        clearUsers.setOnClickListener(fv -> {
+            usersSpinner.setSelection(0); // par défaut rien de sélectionné
+            clearUsers.setVisibility(View.GONE);
+        });
 
         // Ok new meeting
         newMeetingOK = newMeetingDialog.findViewById(R.id.create_ok);
         newMeetingOK.setOnClickListener(fv -> {
-            meetingName.setBackgroundColor(Color.alpha(0));
-            roomSpinner.setBackgroundColor(Color.alpha(0));
+
             boolean complete = true;
 
             if (meetingName.getText().toString().isEmpty()) {
@@ -372,10 +332,12 @@ public class NewMeetingDialog extends Dialog {
                 roomSpinner.setBackgroundColor(Color.RED);
             }
             if (complete) {
+                meetingName.setBackgroundColor(Color.alpha(0));
+                roomSpinner.setBackgroundColor(Color.alpha(0));
                 Meeting currentMeeting = new Meeting();
                 currentMeeting.setName((meetingName.getText().toString()));
                 for (Room r : InitData.mRoomsGlobal)
-                    if (r.getName().toString().equals(aA.getItem(roomSpinner.getSelectedItemPosition()).toString())) {
+                    if (r.getName().toString().equals(roomPicklistAdaptor.getItem(roomSpinner.getSelectedItemPosition()).toString())) {
                         currentMeeting.setRoom(r);
                         break;
                     }
@@ -384,6 +346,8 @@ public class NewMeetingDialog extends Dialog {
 // a revoir en fonction des personnes sélectionnées
                 currentMeeting.setUsers(InitData.mUsersGlobal);
                 InitData.mMeetingsGlobal.add(currentMeeting);
+                FilterMeetings.FilterMeetings();
+                MainActivity.mMeetingsAdapter.notifyDataSetChanged();
                 newMeetingDialog.dismiss();
                 resetNewMeeting();
 
@@ -396,6 +360,7 @@ public class NewMeetingDialog extends Dialog {
         newMeetingCancel = newMeetingDialog.findViewById(R.id.create_cancel);
         newMeetingCancel.setOnClickListener(fv -> {
             newMeetingDialog.dismiss();
+            resetNewMeeting();
         });
 
         // Reset new meeting
@@ -403,37 +368,49 @@ public class NewMeetingDialog extends Dialog {
         newMeetingReset = newMeetingDialog.findViewById(R.id.create_reset);
         newMeetingReset.setOnClickListener(fv -> {
             resetNewMeeting();
-            //                        newMeetingDialog.dismiss();
-            //           createDialogNewMeeting();
-            //                       newMeetingDialog.show();
-        });
+         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void endTimeCalculation() {
+        if ((meetingDuration.getText().toString().isEmpty())) mEnd=mStart;
+        else   mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
+        int jours = mEnd.toLocalDate().compareTo(mStart.toLocalDate());
+        String s="";
+        if ( jours >0)   s = " (+" + jours + ")";
+
+        meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime)+s);
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void resetNewMeeting() {
         meetingName.setBackgroundColor(Color.alpha(0));
-        roomSpinner.setBackgroundColor(Color.alpha(0));
         meetingName.setText("");
-        meetingName.setText(Html.fromHtml("<font color='red'>*</font>"));
+        meetingName.setHint(Html.fromHtml("<font color='red'>*</font><text>Objet de la réunion</text>"));
         clearMeetingName.setVisibility(View.GONE);
+
         meetingDate.setText(LocalDateTime.now().toLocalDate().format(InitData.dtfDate));
-
         mStart = LocalDateTime.now();
-
         resetDate.setVisibility(View.GONE);
+
         meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitData.dtfTime));
         resetTime.setVisibility(View.GONE);
+
         meetingDuration.setText(newMeetingDialog.getContext().getString(R.string.meeting_average_duration));
         resetDuration.setVisibility(View.GONE);
-        mEnd = LocalDateTime.now().plusMinutes(Integer.parseInt(newMeetingDialog.getContext().getString(R.string.meeting_average_duration)));
 
-        meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime));
+        endTimeCalculation();
+
         roomSpinner.setSelection(0); // par défaut rien de sélectionné
+        mandatoryRoom.setVisibility(View.VISIBLE);
         clearNewRoom.setVisibility(View.GONE);
+        roomSpinner.setBackgroundColor(Color.alpha(0));
 
-        // rajouter reset salle et users
 
+        // rajouter reset users
+        usersSpinner.setSelection(0); // par défaut rien de sélectionné
+        clearUsers.setVisibility(View.GONE);
     }
 
 }

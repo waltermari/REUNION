@@ -25,8 +25,7 @@ import fr.waltermarighetto.reunion.model.User;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class InitData {
 
-    public static LocalDate filterDate;
-    private static List<String> filterRoom = new ArrayList<String>();
+
 
     public static List<User> mUsersGlobal;
     public static List<Room> mRoomsGlobal;
@@ -351,21 +350,5 @@ public class InitData {
         }
 
     }
-    public static LocalDate getFilterDate() {
-        return filterDate;
-    }
 
-    public static void setFilterDate(LocalDate date) {
-        filterDate = date;
-    }
-
-    public static List<String> getFilterRoom() {
-        return filterRoom;
-    }
-
-    public static void setFilterRoom(List<String> rooms) {
-        if (rooms == null)
-            filterRoom.clear();
-        else filterRoom = rooms;
-    }
 }

@@ -284,7 +284,6 @@ public class NewMeetingDialog extends Dialog {
 //////////////////////////////////////
         // gestion des utilisateurs avec MultisSpiner
 
-
         usersSpinner = newMeetingDialog.findViewById(R.id.meeting_users);
         clearUsers = newMeetingDialog.findViewById(R.id.clear_users);
 
@@ -292,7 +291,6 @@ public class NewMeetingDialog extends Dialog {
         usersNames.add(""); // String vide pour dire qu'on ne sélectionne personne
 
         for (User user : InitData.mUsersGlobal) usersNames.add(user.getUser());
-
         usersSpinner.setItems(usersNames, "Personne");
 
         // juste après avoir sélectionné une salle de réunion dans le spinner, on positionne l'icone delete room
@@ -304,13 +302,10 @@ public class NewMeetingDialog extends Dialog {
                     clearUsers.setVisibility(View.GONE);
                 else clearUsers.setVisibility(View.VISIBLE);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // code à écrire au cas où on agit sur rien sélectionné
             }
-
-
         });
         clearUsers.setOnClickListener(fv -> {
             usersSpinner.setSelection(0); // par défaut rien de sélectionné
@@ -337,7 +332,8 @@ public class NewMeetingDialog extends Dialog {
                 Meeting currentMeeting = new Meeting();
                 currentMeeting.setName((meetingName.getText().toString()));
                 for (Room r : InitData.mRoomsGlobal)
-                    if (r.getName().toString().equals(roomPicklistAdaptor.getItem(roomSpinner.getSelectedItemPosition()).toString())) {
+                    if (r.getName().toString().equals(roomPicklistAdaptor
+                            .getItem(roomSpinner.getSelectedItemPosition()).toString())) {
                         currentMeeting.setRoom(r);
                         break;
                     }
@@ -350,12 +346,9 @@ public class NewMeetingDialog extends Dialog {
                 MainActivity.mMeetingsAdapter.notifyDataSetChanged();
                 newMeetingDialog.dismiss();
                 resetNewMeeting();
-
-
-
             }
-
         });
+
         // Cancel new meeting
         newMeetingCancel = newMeetingDialog.findViewById(R.id.create_cancel);
         newMeetingCancel.setOnClickListener(fv -> {
@@ -407,8 +400,6 @@ public class NewMeetingDialog extends Dialog {
         clearNewRoom.setVisibility(View.GONE);
         roomSpinner.setBackgroundColor(Color.alpha(0));
 
-
-        // rajouter reset users
         usersSpinner.setSelection(0); // par défaut rien de sélectionné
         clearUsers.setVisibility(View.GONE);
     }

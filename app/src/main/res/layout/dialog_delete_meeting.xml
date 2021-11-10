@@ -1,71 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+
+        android:layout_marginTop="16dp"
+        android:text="@string/meeting_to_be_deleted"
         android:textAlignment="center"
-        android:text="@string/meeting_to_be_deleted" />
 
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
         android:id="@+id/meeting_name"
-        android:textAllCaps="true"
-        android:text="@string/meeting_name" />
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:text="@string/meeting_name"
+        android:textAlignment="viewStart"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
         android:id="@+id/meeting_time"
+
+        app:layout_constraintTop_toBottomOf="@id/meeting_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
         android:text=" jeudi 14/10/2021 10:30 à 11:15 durée 45 minutes"/>
+
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/textView3"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+
+        android:text="@string/meeting_users"
         android:textAlignment="viewStart"
-        android:text="@string/meeting_users" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/meeting_time" />
+
     <TextView
         android:id="@+id/meeting_users"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+        android:text="User1@lamzone.com, User2..."
         android:textAlignment="viewStart"
-        android:text="User1@lamzone.com, User2..." />
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/textView4"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+
+        android:text="@string/meeting_room"
         android:textAlignment="viewStart"
-        android:text="@string/meeting_room" />
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/meeting_users" />
+
+
     <TextView
         android:id="@+id/meeting_room"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:text="Ile de France" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal" >
+        android:text="Ile de France"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/delete_ok"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:clickable="true"
-        android:text="@string/ok" />
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/delete_cancel"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:clickable="true"
-        android:text="@string/cancel"/>
-    </LinearLayout>
-</LinearLayout>
+        android:text="@string/ok"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintStart_toEndOf="@+id/delete_cancel"
+        app:layout_constraintTop_toTopOf="@+id/delete_cancel" />
+
+    <TextView
+        android:id="@+id/delete_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="48dp"
+        android:clickable="true"
+
+        android:text="@string/cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.658"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/meeting_room" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

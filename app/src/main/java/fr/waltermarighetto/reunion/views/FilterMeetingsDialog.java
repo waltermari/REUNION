@@ -126,6 +126,7 @@ public class FilterMeetingsDialog extends Dialog {
 
                 filterRoomSpinner.setSelection(0);
                 FilterMeetings.getFilterRoom().clear();
+
                 clearRoom.setVisibility(View.GONE);
             });
 
@@ -139,6 +140,7 @@ public class FilterMeetingsDialog extends Dialog {
                 clearRoom.setVisibility(View.GONE);
                 FilterMeetings.getFilterRoom().clear();
                 FilterMeetings.setFilterDate(null);
+                filterDateEditText.setText("");
 
             });
 

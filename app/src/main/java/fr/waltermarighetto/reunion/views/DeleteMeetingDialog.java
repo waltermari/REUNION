@@ -38,13 +38,14 @@ public class DeleteMeetingDialog extends Dialog {
         meetingName.setText(meeting_to_delete.getName());
         meetingTime = deleteMeetingDialog.findViewById(R.id.meeting_time);
         String s1 = dtfDateTime.format(meeting_to_delete.getStart()) + " à " + dtfTime.format(meeting_to_delete.getEnd())
-                + (ChronoUnit.SECONDS.between(meeting_to_delete.getStart(), meeting_to_delete.getEnd()) + 5) / 60
+                +" durée "
+                +(ChronoUnit.SECONDS.between(meeting_to_delete.getStart(), meeting_to_delete.getEnd()) + 5) / 60
                 + " minutes";
         meetingTime.setText(s1);
         meetingUsers = deleteMeetingDialog.findViewById(R.id.meeting_users);
         String s = "";
         for (User u : meeting_to_delete.getUsers())
-            s += u + ", ";
+            s += u.getUser().toString() + ", ";
         meetingUsers.setText(s);
         meetingRoom = deleteMeetingDialog.findViewById(R.id.meeting_room);
         meetingRoom.setText(meeting_to_delete.getRoom().getName());

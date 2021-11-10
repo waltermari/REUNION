@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -348,6 +350,10 @@ public class InitData {
             mMeetingsGlobal.add(mMeeting);
 
         }
+ //    mMeetingsGlobal.sort((Comparator<Meeting>  meeting, t1) -> {
+ //        meeting.getStart().isAfter(t1.getStart())
+ //                   LocaldateTime.compare
+ //       });
 
     }
 

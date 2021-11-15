@@ -144,6 +144,17 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
 
                 }
             });
+            mImageRemove.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void onClick(View v) {
+
+ //                   new DeleteMeetingDialog(itemView.getContext(), getAdapterPosition()).show();
+ //                   DeleteMeetingFragment truc = new DeleteMeetingFragment(itemView.getContext(), getAdapterPosition());
+   //                 truc.show();
+   //                     DeleteMeetingFragment.show();
+                }
+            });
         }
 
 

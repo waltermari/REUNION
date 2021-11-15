@@ -53,13 +53,13 @@ public class NewMeetingDialog extends Dialog {
     Spinner roomSpinner;
     MultiSpinner usersSpinner;
 
-    public static Dialog newMeetingDialog;
+ //   public static Dialog newMeetingDialog;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public NewMeetingDialog(Context context) throws IllegalAccessException, InstantiationException {
         super(context);
-        newMeetingDialog = new Dialog(context);
-        newMeetingDialog.setContentView(R.layout.dialog_new_meeting);
+//        newMeetingDialog = new Dialog(context);
+        setContentView(R.layout.dialog_new_meeting);
 
         createDialogNewMeeting();
         resetNewMeeting();
@@ -70,8 +70,8 @@ public class NewMeetingDialog extends Dialog {
     public void createDialogNewMeeting() {
 
 // meeting Name
-        meetingName = newMeetingDialog.findViewById(R.id.meeting_name);
-        clearMeetingName = newMeetingDialog.findViewById(R.id.clear_meeting_name);
+        meetingName = findViewById(R.id.meeting_name);
+        clearMeetingName = findViewById(R.id.clear_meeting_name);
 
         meetingName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -99,13 +99,13 @@ public class NewMeetingDialog extends Dialog {
 
 // Gestion Jour, heure de  début, heure de fin et durée en minutes
 
-        meetingDate = newMeetingDialog.findViewById(R.id.meeting_date);
-        resetDate = newMeetingDialog.findViewById(R.id.reset_date);
-        meetingTime = newMeetingDialog.findViewById(R.id.meeting_start_time);
-        resetTime = newMeetingDialog.findViewById(R.id.reset_time);
-        meetingDuration = newMeetingDialog.findViewById(R.id.meeting_duration);
-        resetDuration = newMeetingDialog.findViewById(R.id.reset_duration);
-        meetingEndTime = newMeetingDialog.findViewById(R.id.meeting_end_time);
+        meetingDate = findViewById(R.id.meeting_date);
+        resetDate = findViewById(R.id.reset_date);
+        meetingTime = findViewById(R.id.meeting_start_time);
+        resetTime = findViewById(R.id.reset_time);
+        meetingDuration = findViewById(R.id.meeting_duration);
+        resetDuration = findViewById(R.id.reset_duration);
+        meetingEndTime = findViewById(R.id.meeting_end_time);
 
 
 // Date du meeting
@@ -160,7 +160,7 @@ public class NewMeetingDialog extends Dialog {
 
         });
 // Heure du meeting
-        newMeetingTimePicker = newMeetingDialog.findViewById(R.id.time_picker);
+        newMeetingTimePicker = findViewById(R.id.time_picker);
         newMeetingTimePicker.setIs24HourView(true); // à mettre peut-être dans le profil utilisateur ou lié à la locale
         newMeetingTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
@@ -221,7 +221,7 @@ public class NewMeetingDialog extends Dialog {
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (meetingDuration.getText().toString().equals(newMeetingDialog.getContext()
+                if (meetingDuration.getText().toString().equals(getContext()
                         .getString(R.string.meeting_average_duration)))
                     resetDuration.setVisibility(View.GONE);
                 else resetDuration.setVisibility(View.VISIBLE);
@@ -230,7 +230,7 @@ public class NewMeetingDialog extends Dialog {
         });
 
         resetDuration.setOnClickListener(fv -> {
-            meetingDuration.setText(newMeetingDialog.getContext().getString(R.string.meeting_average_duration));
+            meetingDuration.setText(getContext().getString(R.string.meeting_average_duration));
             endTimeCalculation();
             resetDuration.setVisibility(View.GONE);
         });
@@ -238,14 +238,14 @@ public class NewMeetingDialog extends Dialog {
 
 // Gestion de la salle de réunion
 
-        roomSpinner = newMeetingDialog.findViewById(R.id.meeting_room_spinner);
-        clearNewRoom = newMeetingDialog.findViewById(R.id.clear_room);
-        mandatoryRoom = newMeetingDialog.findViewById(R.id.mandatoryRoom);
+        roomSpinner = findViewById(R.id.meeting_room_spinner);
+        clearNewRoom = findViewById(R.id.clear_room);
+        mandatoryRoom = findViewById(R.id.mandatoryRoom);
 
-        ArrayAdapter<String> roomPicklistAdaptor = new ArrayAdapter<String>(newMeetingDialog.getContext(),
+        ArrayAdapter<String> roomPicklistAdaptor = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_item);
 
-        roomPicklistAdaptor.add(newMeetingDialog.getContext().getString(R.string.none_room));  // String vide pour dire qu'on ne sélectionne aucune room
+        roomPicklistAdaptor.add(getContext().getString(R.string.none_room));  // String vide pour dire qu'on ne sélectionne aucune room
         for (Room room : InitData.mRoomsGlobal) roomPicklistAdaptor.add(room.getName());
 
         roomSpinner.setSelection(0); // par défaut rien de sélectionné
@@ -284,8 +284,8 @@ public class NewMeetingDialog extends Dialog {
 //////////////////////////////////////
         // gestion des utilisateurs avec MultisSpiner
 
-        usersSpinner = newMeetingDialog.findViewById(R.id.meeting_users);
-        clearUsers = newMeetingDialog.findViewById(R.id.clear_users);
+        usersSpinner = findViewById(R.id.meeting_users);
+        clearUsers = findViewById(R.id.clear_users);
 
         List<String> usersNames = new ArrayList<String>();
         usersNames.add(""); // String vide pour dire qu'on ne sélectionne personne
@@ -313,7 +313,7 @@ public class NewMeetingDialog extends Dialog {
         });
 
         // Ok new meeting
-        newMeetingOK = newMeetingDialog.findViewById(R.id.create_ok);
+        newMeetingOK = findViewById(R.id.create_ok);
         newMeetingOK.setOnClickListener(fv -> {
 
             boolean complete = true;
@@ -344,21 +344,21 @@ public class NewMeetingDialog extends Dialog {
                 InitData.mMeetingsGlobal.add(currentMeeting);
                 FilterMeetings.FilterMeetings();
                 MainActivity.mMeetingsAdapter.notifyDataSetChanged();
-                newMeetingDialog.dismiss();
+                dismiss();
                 resetNewMeeting();
             }
         });
 
         // Cancel new meeting
-        newMeetingCancel = newMeetingDialog.findViewById(R.id.create_cancel);
+        newMeetingCancel = findViewById(R.id.create_cancel);
         newMeetingCancel.setOnClickListener(fv -> {
-            newMeetingDialog.dismiss();
+            dismiss();
             resetNewMeeting();
         });
 
         // Reset new meeting
 
-        newMeetingReset = newMeetingDialog.findViewById(R.id.create_reset);
+        newMeetingReset = findViewById(R.id.create_reset);
         newMeetingReset.setOnClickListener(fv -> {
             resetNewMeeting();
          });
@@ -390,7 +390,7 @@ public class NewMeetingDialog extends Dialog {
         meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitData.dtfTime));
         resetTime.setVisibility(View.GONE);
 
-        meetingDuration.setText(newMeetingDialog.getContext().getString(R.string.meeting_average_duration));
+        meetingDuration.setText(getContext().getString(R.string.meeting_average_duration));
         resetDuration.setVisibility(View.GONE);
 
         endTimeCalculation();

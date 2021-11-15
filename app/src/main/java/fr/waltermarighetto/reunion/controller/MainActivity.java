@@ -79,13 +79,13 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton floatingNewMeeting = findViewById(R.id.new_meeting);
         floatingNewMeeting.setOnClickListener(view -> {
                     try {
-                        new NewMeetingDialog(this);
+                        new NewMeetingDialog(this).show();
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     } catch (InstantiationException e) {
                         e.printStackTrace();
                     }
-                    NewMeetingDialog.newMeetingDialog.show();
+    //                new NewMeetingDialog(this).show();
 
                     // trop tôt il faut l'activer sur OK                   initRecyclerForMeetings();
 

@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/new_meeting"
-    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-    android:layout_marginVertical="@dimen/activity_vertical_margin">
+    android:layout_height="match_parent" >
+<androidx.constraintlayout.widget.ConstraintLayout
 
-    <TextView
-        android:id="@+id/title_guideline"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/new_meeting_title"
-        android:textAlignment="center"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:id="@+id/new_meeting"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:isScrollContainer="true"
+    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+    android:paddingVertical="@dimen/activity_vertical_margin">
+
 
     <!-- objet de la réunion avec delete image -->
 
@@ -25,28 +22,31 @@
         android:id="@+id/meeting_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:hint="@string/new_meeting_enter_name"
+
         android:inputType="text"
         android:singleLine="true"
         android:textAlignment="viewStart"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
         app:layout_constraintEnd_toStartOf="@id/icons_guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_guideline" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/clear_meeting_name"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:padding="18dp"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:clickable="true"
         android:contentDescription="@string/delete_cross"
         android:focusable="true"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="@id/meeting_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/meeting_name"
         app:layout_constraintStart_toEndOf="@id/icons_guideline"
+        app:layout_constraintTop_toTopOf="@id/meeting_name"
         app:srcCompat="@drawable/ic_dialog_close_light" />
 
     <!-- date de la réunion avec bouton pour ouvrir calendrier -->
@@ -54,9 +54,10 @@
         android:id="@+id/date_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:text="@string/meeting_date"
         android:textAlignment="viewStart"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
         app:layout_constraintBaseline_toBaselineOf="@id/meeting_date"
         app:layout_constraintEnd_toStartOf="@id/labels_guideline"
         app:layout_constraintStart_toStartOf="parent" />
@@ -65,16 +66,17 @@
         android:id="@+id/meeting_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:focusable="false"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:clickable="true"
+        android:focusable="true"
         android:maxLines="1"
         android:text=" jeudi 14/10/2021"
         android:textAlignment="viewStart"
         android:textSize="16sp"
 
-        app:layout_constraintStart_toEndOf="@id/date_label"
         app:layout_constraintEnd_toStartOf="@id/icons_guideline"
+        app:layout_constraintStart_toEndOf="@id/date_label"
         app:layout_constraintTop_toBottomOf="@id/meeting_name" />
 
 
@@ -82,16 +84,17 @@
         android:id="@+id/reset_date"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:padding="4dp"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:adjustViewBounds="false"
         android:clickable="true"
         android:contentDescription="@string/reset_date"
         android:focusable="true"
-        app:layout_constraintTop_toTopOf="@id/meeting_date"
+        android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="@id/meeting_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icons_guideline"
+        app:layout_constraintTop_toTopOf="@id/meeting_date"
 
         app:srcCompat="@drawable/reset" />
 
@@ -101,9 +104,10 @@
         android:id="@+id/time_start_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:text="@string/meeting_start"
         android:textAlignment="viewStart"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
         app:layout_constraintBaseline_toBaselineOf="@id/meeting_start_time"
         app:layout_constraintEnd_toStartOf="@id/labels_guideline"
         app:layout_constraintStart_toStartOf="parent" />
@@ -112,28 +116,32 @@
         android:id="@+id/meeting_start_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:inputType="time"
         android:text="10:30"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:textAlignment="viewStart"
         app:layout_constraintEnd_toStartOf="@id/icons_guideline"
         app:layout_constraintStart_toEndOf="@id/time_start_label"
         app:layout_constraintTop_toBottomOf="@id/meeting_date" />
+
     <TimePicker
+        android:id="@+id/time_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:id="@+id/time_picker"
         tools:ignore="MissingConstraints" />
+
     <ImageView
         android:id="@+id/reset_time"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:padding="4dp"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:clickable="true"
         android:contentDescription="@string/delete_cross"
         android:focusable="true"
+        android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="@id/meeting_start_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icons_guideline"
@@ -146,9 +154,10 @@
         android:id="@+id/time_end_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:text="@string/meeting_end"
         android:textAlignment="viewStart"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
         app:layout_constraintBaseline_toBaselineOf="@id/meeting_end_time"
         app:layout_constraintEnd_toStartOf="@id/labels_guideline"
         app:layout_constraintStart_toStartOf="parent" />
@@ -157,38 +166,25 @@
         android:id="@+id/meeting_end_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+
+        android:layout_marginStart="10sp"
+        android:minHeight="24sp"
         android:text="11:15"
         android:textAlignment="viewStart"
-        android:minHeight="24sp"
         android:textSize="18sp"
-        android:layout_marginStart="2sp"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
         app:layout_constraintEnd_toEndOf="@id/meeting_date"
         app:layout_constraintStart_toEndOf="@id/time_end_label"
         app:layout_constraintTop_toBottomOf="@id/meeting_start_time" />
-
-    <TextView
-        android:id="@+id/mandatoryRoom"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:minHeight="24sp"
-        android:text="*"
-        android:textAlignment="viewEnd"
-        android:textColor="@color/design_default_color_error"
-
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@id/room_label"
-        app:layout_constraintTop_toBottomOf="@id/meeting_duration" />
 
 
     <TextView
         android:id="@+id/duration_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:text="@string/meeting_duration"
         android:textAlignment="viewStart"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
         app:layout_constraintBaseline_toBaselineOf="@id/meeting_duration"
         app:layout_constraintEnd_toStartOf="@id/labels_guideline"
         app:layout_constraintStart_toStartOf="parent" />
@@ -197,9 +193,10 @@
         android:id="@+id/meeting_duration"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:inputType="number"
         android:maxLength="4"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:text="45"
         android:textAlignment="viewStart"
         app:layout_constraintStart_toEndOf="@id/labels_guideline"
@@ -209,9 +206,9 @@
         android:id="@+id/duration_unit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+
         android:text="@string/units_mn"
         android:textAlignment="viewStart"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
         app:layout_constraintBaseline_toBaselineOf="@id/meeting_duration"
         app:layout_constraintStart_toEndOf="@id/meeting_duration"
         app:layout_constraintTop_toBottomOf="@id/time_end_label" />
@@ -221,7 +218,8 @@
         android:id="@+id/reset_duration"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:layout_marginStart="8dp"
         android:clickable="true"
         android:contentDescription="@string/delete_cross"
@@ -239,43 +237,67 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:text="@string/meeting_room"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginVertical="8dp"
 
+        android:text="@string/meeting_room"
         android:textAlignment="viewStart"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
         app:layout_constraintBaseline_toBaselineOf="@id/meeting_room_spinner"
+        app:layout_constraintTop_toBottomOf="@id/duration_label"
         app:layout_constraintEnd_toStartOf="@id/labels_guideline"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/mandatoryRoom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
+        android:minHeight="24sp"
+        android:text=" * "
+        android:textAlignment="viewEnd"
+        android:textColor="@color/design_default_color_error"
+
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/room_label"
+        app:layout_constraintBottom_toBottomOf="@id/room_label"
+        app:layout_constraintTop_toTopOf="@+id/room_label"/>
 
 
     <Spinner
         android:id="@+id/meeting_room_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:hint="@string/select_a_room"
+        android:paddingStart="16dp"
         android:spinnerMode="dropdown"
         android:text="Ile de France"
         android:textAlignment="viewStart"
+        android:textIsSelectable="true"
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@id/icons_guideline"
         app:layout_constraintStart_toEndOf="@id/labels_guideline"
-        app:layout_constraintTop_toBottomOf="@id/meeting_duration" />
+        app:layout_constraintTop_toBottomOf="@id/duration_label" />
 
 
     <ImageView
         android:id="@+id/clear_room"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:padding="16dp"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/meeting_room_spinner"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="@id/meeting_room_spinner"
-
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icons_guideline"
+
+        app:layout_constraintTop_toTopOf="@id/meeting_room_spinner"
         app:srcCompat="@drawable/ic_dialog_close_light" />
 
 
@@ -283,13 +305,14 @@
         android:id="@+id/users_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:text="@string/meeting_users"
         android:textAlignment="viewStart"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        app:layout_constraintBaseline_toBaselineOf="@id/meeting_users"
+
         app:layout_constraintEnd_toStartOf="@id/labels_guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/meeting_users" />
+        app:layout_constraintTop_toBottomOf="@id/room_label" />
 
     <fr.waltermarighetto.reunion.views.MultiSpinner
 
@@ -299,17 +322,17 @@
 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:dropDownWidth="match_parent"
-
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginVertical="@dimen/activity_vertical_margin"
+
+        android:dropDownWidth="match_parent"
         android:isScrollContainer="true"
-        android:minHeight="48dp"
+        android:minHeight="24dp"
         android:spinnerMode="dialog"
         android:text="User1@lamzone.com, User2..."
         android:textAlignment="viewStart"
-        app:layout_constrainedHeight="true"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@id/okcancel_barrier"
+
+
         app:layout_constraintEnd_toStartOf="@id/icons_guideline"
         app:layout_constraintStart_toStartOf="@id/labels_guideline"
         app:layout_constraintTop_toBottomOf="@id/meeting_room_spinner"
@@ -319,10 +342,11 @@
         android:id="@+id/clear_users"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+
         android:clickable="true"
         android:focusable="true"
-        android:padding="18dp"
+        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icons_guideline"
         app:layout_constraintTop_toBottomOf="@id/meeting_room_spinner"
@@ -332,94 +356,18 @@
         android:id="@+id/users_display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:text="User1@lamzone.com, User2..."
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:textAlignment="viewStart"
-        app:layout_constraintTop_toBottomOf="@id/meeting_users"
-        app:layout_constraintBottom_toTopOf="@id/icons_guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-
-    <androidx.constraintlayout.widget.Group
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-
-        android:clickable="true"
-        android:focusable="true"
+android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/okcancel_barrier"
-        app:layout_constraintBottom_toBottomOf="parent">
-    </androidx.constraintlayout.widget.Group>
-
-    <TextView
-        android:id="@+id/create_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="32dp"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-
-
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/cancel"
-
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@id/create_reset"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/okcancel_barrier" />
-
-    <TextView
-        android:id="@+id/create_reset"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="32dp"
-
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/reset_all"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@id/create_cancel"
-        app:layout_constraintTop_toBottomOf="@id/okcancel_barrier" />
-
-    <TextView
-        android:id="@+id/create_ok"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="32dp"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="32dp"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/ok"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/create_reset"
-        app:layout_constraintTop_toBottomOf="@id/okcancel_barrier" />
+        app:layout_constraintTop_toBottomOf="@id/meeting_users" />
 
 
 
-
-
-
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/okcancel_barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="meeting_users, users_label" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/labels_guideline"
@@ -436,3 +384,4 @@
         app:layout_constraintGuide_end="40dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>

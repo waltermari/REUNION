@@ -1,6 +1,7 @@
 package fr.waltermarighetto.reunion.views;
 
 // import android.content.Context;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -11,7 +12,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+
 
 
 import java.util.List;
@@ -24,55 +29,18 @@ import fr.waltermarighetto.reunion.model.User;
 
 public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MeetingsViewHolder> {
     private  List<Meeting> aDataset;
+    private Context mContext;
 
     // Tableau de couleur des salles
     int[] roomColors = {Color.BLUE, Color.GREEN, Color.BLACK, Color.RED,
             Color.CYAN, Color.GRAY, Color.MAGENTA, Color.YELLOW, Color.DKGRAY, Color.LTGRAY};
 
-    public MeetingsAdapter(List<Meeting> dataset ) {
+    public MeetingsAdapter(Context context, List<Meeting> dataset ) {
         this.aDataset = dataset;
+        this.mContext = context;
     }
 
-    /** à supprimer
-     public void meetingsAdapterAdd(Meeting meeting ) {
-     if (meeting != null) {
-     this.aDataset.add(meeting);
-     }
-     }
-     public void meetingsAdapterRemove( Meeting meeting ) {
-     if (meeting != null) {
-     this.aDataset.remove(meeting);
-     //          notifyDataSetChanged();
-     }
-     }
-     public void meetingsAdapterUpdate(List<Meeting> dataset) {
-     // on enlève de la lsite finale les meetings qui ne sont pas dans la liste d'entrée,
-     // puis on rajoute les nouveaux
-     boolean toRemove, toAdd;
-     for (Meeting metTarget : aDataset) {
-     toRemove = true;
-     for (Meeting metSource: dataset) {
-     if(metTarget.equals(metSource)) {
-     toRemove = false;
-     break; // le meeting doit être conservé dans la liste
-     }
-     if (toRemove) aDataset.remove(metTarget);
-     }
-     }
-     for (Meeting metSource : dataset) {
-     toAdd = true;
-     for (Meeting metTarget : aDataset) {
-     if (metSource.equals(metTarget)) {
-     toAdd = false;
-     break; //le meeting est déjà en liste, on ne le rajoute pas
-     }
-     if (toAdd) aDataset.add(metSource);
-     }
-     }
 
-     //       notifyDataSetChanged();
-     }
-     */
 
     @NonNull
     @Override
@@ -133,27 +101,37 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
             mTextRoom = itemView.findViewById(R.id.item_room);
             mTextUsers = itemView.findViewById(R.id.item_users);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @RequiresApi(api = Build.VERSION_CODES.O)
-                @Override
-                public void onClick(View v) {
+            //          itemView.setOnClickListener(new View.OnClickListener() {
+            //              @RequiresApi(api = Build.VERSION_CODES.O)
+            //               @Override
+            //              public void onClick(View v) {
 
-                    new DeleteMeetingDialog(itemView.getContext(),
-                            getAdapterPosition())
-                            .show();
-
-                }
-            });
+            //                  new DeleteMeetingDialog(itemView.getContext(),
+            //                           getAdapterPosition());
+//                            .show();
+//
+            //              }
+            //        });
             mImageRemove.setOnClickListener(new View.OnClickListener() {
+
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onClick(View v) {
 
- //                   new DeleteMeetingDialog(itemView.getContext(), getAdapterPosition()).show();
- //                   DeleteMeetingFragment truc = new DeleteMeetingFragment(itemView.getContext(), getAdapterPosition());
-   //                 truc.show();
-   //                     DeleteMeetingFragment.show();
-                }
+
+                            FragmentManager manager =  ((AppCompatActivity)mContext).getSupportFragmentManager();
+                            DeleteMeetingDialog dialog = new DeleteMeetingDialog(mContext, getAdapterPosition());
+                            dialog.show(manager, "Dialog");
+                        }
+
+   //                 new DeleteMeetingDialog().DeleteMeetingDialog(itemView.getContext(),
+   //                         getAdapterPosition()).show();
+
+                    //                   new DeleteMeetingDialog(itemView.getContext(), getAdapterPosition()).show();
+                    //                   DeleteMeetingFragment truc = new DeleteMeetingFragment(itemView.getContext(), getAdapterPosition());
+                    //                 truc.show();
+                    //                     DeleteMeetingFragment.show();
+   //             }
             });
         }
 

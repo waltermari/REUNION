@@ -33,4 +33,8 @@
     <string name="none_room">Aucune</string>
     <string name="none_user">Aucun</string>
     <string name="meeting_average_duration">45</string>
+
+    <string name="from">De :</string>
+    <string name="to">à</string>
+
 </resources>

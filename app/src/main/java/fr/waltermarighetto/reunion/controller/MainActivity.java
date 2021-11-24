@@ -1,10 +1,6 @@
 package fr.waltermarighetto.reunion.controller;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -15,7 +11,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.os.Bundle;
 
 import android.view.Menu;
@@ -31,17 +26,12 @@ import fr.waltermarighetto.reunion.views.MeetingsAdapter;
 import fr.waltermarighetto.reunion.views.NewMeetingDialog;
 
 @SuppressLint({"NewApi", "ResourceType"})
-@RequiresApi(api = Build.VERSION_CODES.O)
+
 public class MainActivity extends AppCompatActivity {
 
     // pour la fenêtre de dialogue du filtre sur les réunions
     public static MeetingsAdapter mMeetingsAdapter;
- //   private FilterMeetingsDialog filterMeetingsDialog;
 
-
-
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,25 +41,36 @@ public class MainActivity extends AppCompatActivity {
         new InitData();
 
         // préparation du Recycler View pour affichage des meetings
-        prepareMeetingsDisplay();
+        manageMeetingsDisplay();
 
         // préparation accès création nouveau Meeting par FloatingActionButton
-        prepareNewMeetingAccess();
+        manageNewMeetingAccess();
 
         // configure Refresh avec SwipeRefreshLayout
         refreshMeetingsDisplay();
     }
+    private void manageMeetingsDisplay() {
+        RecyclerView mRecycler = findViewById(R.id.meetings_recycler_view);
+        mRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mRecycler.setItemAnimator(new DefaultItemAnimator());
+        mMeetingsAdapter = new MeetingsAdapter(this, new FilterMeetings().FilterMeetings());
+        mRecycler.setAdapter(mMeetingsAdapter);
+    }
 
-    private void prepareNewMeetingAccess() {
+    private void manageNewMeetingAccess() {
 
         // Accès au dialogue de création d'un nouveau Meeting
 
         findViewById(R.id.new_meeting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 FragmentManager manager = getSupportFragmentManager();
-                NewMeetingDialog dialog = new NewMeetingDialog();
-                dialog.show(manager, "Dialog");
+                if (manager.findFragmentByTag("dialog") != null) {
+          //          manager.findFragmentByTag("dialog").setReenterTransition();
+                }
+                    NewMeetingDialog dialog = new NewMeetingDialog();
+                dialog.show(manager, "dialog");
             }
         });
     }
@@ -86,27 +87,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void prepareMeetingsDisplay() {
-        RecyclerView mRecycler = findViewById(R.id.meetings_recycler_view);
-        mRecycler.setLayoutManager(new LinearLayoutManager(this));
-        mRecycler.setItemAnimator(new DefaultItemAnimator());
-        mMeetingsAdapter = new MeetingsAdapter(this, new FilterMeetings().FilterMeetings());
-        mRecycler.setAdapter(mMeetingsAdapter);
-    }
+
 
     // on met le bouton de filtre par date et/ou salle dans la barre d'actions (menu)
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
         getMenuInflater().inflate(R.menu.menu_main, menu);
- //       filterMeetingsDialog =  new FilterMeetingsDialog();
-   //     new FilterMeetingsDialog();
         return true;
     }
 
-    @SuppressLint("NewApi")
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
+
     @Override
     public boolean onOptionsItemSelected (MenuItem item){
         // devrait être remplacé par un accès direct car il n'y a qu'une possibilité

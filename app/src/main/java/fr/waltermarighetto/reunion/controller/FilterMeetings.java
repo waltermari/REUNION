@@ -36,7 +36,7 @@ public class FilterMeetings {
             timeToUseForChecks = LocalDateTime.now();
         else timeToUseForChecks = (LocalDateTime) filterDate.atStartOfDay();
 
-        for (fr.waltermarighetto.reunion.model.Meeting meet : InitData.mMeetingsGlobal) {
+        for (fr.waltermarighetto.reunion.model.Meeting meet : InitData.getMeetingsGlobal()) {
             if (meet.getEnd().isAfter(timeToUseForChecks)) { //le meeting n'est pas termminé
 
                 if (filterDate == null || filterDate.compareTo(meet.getStart().toLocalDate()) ==0) {   // le meeting a une bonne date

@@ -109,6 +109,9 @@ public class FilterMeetingsDialog extends DialogFragment {
                         FilterMeetings.getFilterRoom().clear();
                         FilterMeetings.setFilterDate(null);
                         filterDateEditText.setText("");
+
+                        FilterMeetings.FilterMeetings();
+                        MainActivity.mMeetingsAdapter.notifyDataSetChanged();
                     }
                 })
                 .create();
@@ -123,8 +126,8 @@ public class FilterMeetingsDialog extends DialogFragment {
         if (FilterMeetings.getFilterRoom().size() != 0) {
 
             for (String s : FilterMeetings.getFilterRoom()) {
-                for( int i=0; i < InitData.mRoomsGlobal.size(); i++ ) {
-                    if (s.toString().equals(InitData.mRoomsGlobal.get(i).getName())) {
+                for( int i=0; i < InitData.getRoomsGlobal().size(); i++ ) {
+                    if (s.toString().equals(InitData.getRoomsGlobal().get(i).getName())) {
                         filterRoomSpinner.setSelection(i+1);
                         clearRoom.setVisibility(View.VISIBLE);
                         break;
@@ -159,8 +162,9 @@ public class FilterMeetingsDialog extends DialogFragment {
     }
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void prepareRoomSpinner(View view) {
+    private void prepareRoomSpinner(@NonNull View view) {
 
         filterRoomSpinner = view.findViewById(R.id.filter_room);
         clearRoom = view.findViewById(R.id.clear_room);
@@ -169,7 +173,7 @@ public class FilterMeetingsDialog extends DialogFragment {
 
         aA.add(getString(R.string.all_rooms));  // String vide pour dire qu'on sélectionne toutes les salles
 
-        for (Room room : InitData.mRoomsGlobal) aA.add(room.getName());
+        for (Room room : InitData.getRoomsGlobal()) aA.add(room.getName());
         filterRoomSpinner.setSelection(0); // par défaut rien de sélectionné
         clearRoom.setVisibility(View.GONE);
         filterRoomSpinner.setAdapter(aA);

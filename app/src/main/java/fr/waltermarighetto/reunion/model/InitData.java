@@ -27,11 +27,9 @@ import fr.waltermarighetto.reunion.model.User;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class InitData {
 
-
-
-    public static List<User> mUsersGlobal;
-    public static List<Room> mRoomsGlobal;
-    public static List<Meeting> mMeetingsGlobal;
+    private static List<User> mUsersGlobal;
+    private static List<Room> mRoomsGlobal;
+    private static List<Meeting> mMeetingsGlobal;
 
     public static DateTimeFormatter dtfDateTime = DateTimeFormatter.ofPattern("eeee dd-MM-YYYY HH'h'mm");
     public static DateTimeFormatter dtfDate = DateTimeFormatter.ofPattern("eeee dd-MM-YYYY");
@@ -40,7 +38,6 @@ public class InitData {
     public static SimpleDateFormat sdf = new SimpleDateFormat("EEEE dd/MM/yy", Locale.FRANCE);
 
     {
-
         mUsersGlobal = new ArrayList<User>();
         mRoomsGlobal = new ArrayList<Room>();
         mMeetingsGlobal = new ArrayList<Meeting>();
@@ -68,11 +65,14 @@ public class InitData {
         String[] salles = new String[]{"Bourgogne", "Corse", "Guadeloupe", "Aquitaine", "Bretagne",
                 "Ile de France", "PACA", "Martinique", "Occitanie", "Auvergne"};
 
+        // Tableau de couleur des salles
+        int[] roomColors = {Color.BLUE, Color.GREEN, Color.BLACK, Color.RED,
+                Color.CYAN, Color.GRAY, Color.MAGENTA, Color.YELLOW, Color.DKGRAY, Color.LTGRAY};
 
-        for (String salle : salles) {
+        for (int i=0; i< salles.length; i++) {
             Room ro = new Room();
-            ro.setName(salle);
-
+            ro.setName(salles[i]);
+            ro.setColor(roomColors[i]);
             mRoomsGlobal.add(ro);
         }
 
@@ -99,7 +99,7 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().minusMinutes(20));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(25));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
 
         }
         {
@@ -121,7 +121,7 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().plusMinutes(30));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(75));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
         }
         {
             Meeting mMeeting = new Meeting();
@@ -146,7 +146,7 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().minusMinutes(20));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(25));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
 
         }
         {
@@ -163,7 +163,7 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().minusMinutes(5));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(15));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
         }
 
         {
@@ -188,7 +188,7 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().minusMinutes(10));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(15));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
 
         }
         {
@@ -212,7 +212,7 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().minusMinutes(10));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(15));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
 
         }
         {
@@ -237,7 +237,7 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().minusMinutes(10));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(15));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
 
         }
         {
@@ -262,7 +262,7 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().minusMinutes(10));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(15));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
 
         }
         {
@@ -287,7 +287,7 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().minusMinutes(10));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(15));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
 
         }
 
@@ -308,7 +308,7 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().minusMinutes(10));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(1));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
 
         }
 
@@ -329,7 +329,7 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().minusMinutes(10));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(2));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
 
         }
         {
@@ -347,14 +347,37 @@ public class InitData {
             mMeeting.setStart(LocalDateTime.now().minusMinutes(10));
             mMeeting.setEnd(LocalDateTime.now().plusMinutes(3));
 
-            mMeetingsGlobal.add(mMeeting);
+            addSortedMeeting(mMeeting);
 
         }
- //    mMeetingsGlobal.sort((Comparator<Meeting>  meeting, t1) -> {
- //        meeting.getStart().isAfter(t1.getStart())
- //                   LocaldateTime.compare
- //       });
+        //    mMeetingsGlobal.sort((Comparator<Meeting>  meeting, t1) -> {
+        //        meeting.getStart().isAfter(t1.getStart())
+        //                   LocaldateTime.compare
+        //       });
 
     }
+    public static List<User> getUsersGlobal() {
+        return mUsersGlobal;
+    }
 
+    public static List<Room> getRoomsGlobal(){
+        return mRoomsGlobal;
+    }
+
+    public static List<Meeting> getMeetingsGlobal() {
+        return mMeetingsGlobal;
+    }
+
+    public static void addSortedMeeting(Meeting meeting) {
+        int size = mMeetingsGlobal.size();
+        if ( size == 0) mMeetingsGlobal.add(meeting);
+
+       else for ( int i=0; i<size; i++) {
+            if (meeting.getStart().isBefore(mMeetingsGlobal.get(i).getStart())) {
+                mMeetingsGlobal.add(i, meeting);
+                break;
+            }
+        }
+        if (size==mMeetingsGlobal.size())   mMeetingsGlobal.add(meeting);
+    }
 }

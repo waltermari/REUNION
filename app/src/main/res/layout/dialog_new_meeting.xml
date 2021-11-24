@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-<androidx.constraintlayout.widget.ConstraintLayout
-
-    android:id="@+id/new_meeting"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:id="@+id/new_meeting"
     android:isScrollContainer="true"
     android:paddingHorizontal="@dimen/activity_horizontal_margin"
     android:paddingVertical="@dimen/activity_vertical_margin">
-
 
     <!-- objet de la réunion avec delete image -->
 
@@ -125,12 +119,7 @@
         app:layout_constraintStart_toEndOf="@id/time_start_label"
         app:layout_constraintTop_toBottomOf="@id/meeting_date" />
 
-    <TimePicker
-        android:id="@+id/time_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        tools:ignore="MissingConstraints" />
+
 
     <ImageView
         android:id="@+id/reset_time"
@@ -314,24 +303,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/room_label" />
 
-    <fr.waltermarighetto.reunion.views.MultiSpinner
-
+    <TextView
 
         android:id="@+id/meeting_users"
-
-
+        android:clickable="true"
+        android:focusable="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginVertical="@dimen/activity_vertical_margin"
-
-        android:dropDownWidth="match_parent"
         android:isScrollContainer="true"
-        android:minHeight="24dp"
-        android:spinnerMode="dialog"
-        android:text="User1@lamzone.com, User2..."
+        android:textIsSelectable="true"
+        android:textSize="18sp"
+        android:text="@string/none_user"
         android:textAlignment="viewStart"
-
 
         app:layout_constraintEnd_toStartOf="@id/icons_guideline"
         app:layout_constraintStart_toStartOf="@id/labels_guideline"
@@ -352,19 +337,7 @@
         app:layout_constraintTop_toBottomOf="@id/meeting_room_spinner"
         app:srcCompat="@drawable/ic_dialog_close_light" />
 
-    <TextView
-        android:id="@+id/users_display"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:text="User1@lamzone.com, User2..."
-        android:textAlignment="viewStart"
-android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/meeting_users" />
+
 
 
 
@@ -384,4 +357,3 @@ android:visibility="visible"
         app:layout_constraintGuide_end="40dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>

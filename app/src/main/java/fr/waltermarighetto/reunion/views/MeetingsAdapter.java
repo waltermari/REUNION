@@ -65,12 +65,12 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
         holder.mTextUsers.setText(s);
 
         Room ro = aDataset.get(position).getRoom();
-
-        for (int i = 0; i < InitData.mRoomsGlobal.size(); i++) {
-            if (ro.getName().toString().equals( InitData.mRoomsGlobal.get(i).getName().toString())) {
-                holder.mImageStatus.setBackgroundColor(roomColors[i]);
-                break;}
-        }
+        holder.mImageStatus.setBackgroundColor(ro.getColor());
+  //      for (int i = 0; i < InitData.getRoomsGlobal().size(); i++) {
+  //          if (ro.getName().toString().equals( InitData.getRoomsGlobal().get(i).getName().toString())) {
+  //              holder.mImageStatus.setBackgroundColor(roomColors[i]);
+  //              break;}
+  //      }
         //      holder.mImageStatus.getDrawable();
         holder.mImageRemove.forceLayout();
 

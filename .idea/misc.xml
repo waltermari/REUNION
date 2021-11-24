@@ -10,12 +10,15 @@
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/drawable/ic_search_black_24dp.xml" value="0.18333333333333332" />
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/activity_filter_meetings.xml" value="0.1671875" />
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/activity_main.xml" value="0.176" />
+        <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/backup_new_meeting_layout.xml" value="0.1" />
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/dialog_create_meeting.xml" value="0.1296875" />
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/dialog_delete_meeting.xml" value="0.4" />
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/dialog_filter_meetings.xml" value="0.4" />
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/dialog_new_meeting.xml" value="0.4" />
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/item_meetinglist.xml" value="0.13020833333333334" />
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/item_meetings.xml" value="0.3090909090909091" />
+        <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/item_multi_selection.xml" value="0.3061594202898551" />
+        <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/item_user.xml" value="0.264" />
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/test.xml" value="0.2" />
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/test_a_jeter.xml" value="0.12604166666666666" />
         <entry key="..\:/ProjetsAndroid/REUNION/app/src/main/res/layout/time_picker.xml" value="0.12604166666666666" />

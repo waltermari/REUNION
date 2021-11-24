@@ -7,6 +7,7 @@ import android.app.Dialog;
 
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Color;
 import android.os.Build;
 
@@ -28,7 +29,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 
 import java.time.LocalDateTime;
@@ -46,16 +49,18 @@ import fr.waltermarighetto.reunion.model.Room;
 import fr.waltermarighetto.reunion.model.User;
 
 public class NewMeetingDialog extends DialogFragment {
-    TextView  meetingEndTime, mandatoryRoom;
+    TextView  meetingEndTime, mandatoryRoom, meetingUsers;
     ImageView clearMeetingName, clearNewRoom, resetDate, resetTime, resetDuration, clearUsers;
-    EditText meetingName, meetingDate, meetingTime, meetingDuration;
+    EditText meetingName, meetingDate, meetingTime, meetingDuration ;
     LocalDateTime mStart;
     LocalDateTime mEnd;
     TimePicker newMeetingTimePicker;
     Spinner roomSpinner;
     ArrayAdapter<String> roomPicklistAdaptor;
-    MultiSpinner usersSpinner;
-
+ //   UsersPicker usersPickerDialog;
+    MultiPicker   usersPickerDialog;
+// MultiSpinner usersSpinner;
+boolean[] currentUsersSelection;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -75,13 +80,14 @@ public class NewMeetingDialog extends DialogFragment {
         resetNewMeeting();
 
         // on crée AlertDialog
-        return new AlertDialog.Builder(getActivity())
+
+        AlertDialog.Builder alDi = new AlertDialog.Builder(getActivity());
+        alDi
                 .setTitle(R.string.new_meeting_title)
                 .setView(v)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onClick(DialogInterface dialog, int id) {
-
                         // Ok new meeting
                         boolean complete = true;
 
@@ -98,7 +104,7 @@ public class NewMeetingDialog extends DialogFragment {
                             roomSpinner.setBackgroundColor(Color.alpha(0));
                             Meeting currentMeeting = new Meeting();
                             currentMeeting.setName((meetingName.getText().toString()));
-                            for (Room r : InitData.mRoomsGlobal)
+                            for (Room r : InitData.getRoomsGlobal())
                                 if (r.getName().toString().equals(roomPicklistAdaptor
                                         .getItem(roomSpinner.getSelectedItemPosition()).toString())) {
                                     currentMeeting.setRoom(r);
@@ -106,12 +112,30 @@ public class NewMeetingDialog extends DialogFragment {
                                 }
                             currentMeeting.setStart(mStart);
                             currentMeeting.setEnd(mEnd);
-                            // a revoir en fonction des personnes sélectionnées
-                            currentMeeting.setUsers(InitData.mUsersGlobal);
-                            InitData.mMeetingsGlobal.add(currentMeeting);
+
+                            // users
+
+                            boolean[] selection = usersPickerDialog.getSelected();
+
+                            String s="";
+                            List<User> lUser= new ArrayList<User>();
+                            for (int i =0; i<selection.length; i++) {
+                                if(selection[i]) {
+                                    s += InitData.getUsersGlobal().get(i).getUser().toString() + "\n";
+                                    lUser.add(InitData.getUsersGlobal().get(i));
+                                }
+                            }
+                            currentMeeting.setUsers(lUser);
+                            meetingUsers.setText(s);
+
+
+                            InitData.addSortedMeeting(currentMeeting);
                             FilterMeetings.FilterMeetings();
                             MainActivity.mMeetingsAdapter.notifyDataSetChanged();
                             resetNewMeeting();
+                        } else {
+                            //que faire ? on doit éviter le dismiss()
+                            //alDi.create().show();
                         }
                     }
                 })
@@ -127,9 +151,12 @@ public class NewMeetingDialog extends DialogFragment {
 
                         resetNewMeeting();
 
+                        // alDi.create().show();
                     }
                 })
-                .create();
+        .setCancelable(false);
+
+        return alDi.create();
     }
 
     private void manageName(View view) {
@@ -167,9 +194,6 @@ public class NewMeetingDialog extends DialogFragment {
         // Gestion Jour, heure de  début, heure de fin et durée en minutes
         meetingDate = view.findViewById(R.id.meeting_date);
         resetDate = view.findViewById(R.id.reset_date);
-        meetingTime = view.findViewById(R.id.meeting_start_time);
-        resetTime = view.findViewById(R.id.reset_time);
-        meetingEndTime = view.findViewById(R.id.meeting_end_time);
 
         Calendar newMeetingCalendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -224,8 +248,34 @@ public class NewMeetingDialog extends DialogFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void manageTime(View view) {
+        meetingTime = view.findViewById(R.id.meeting_start_time);
+        resetTime = view.findViewById(R.id.reset_time);
+        meetingEndTime = view.findViewById(R.id.meeting_end_time);
 
-        newMeetingTimePicker = view.findViewById(R.id.time_picker);
+        /**       final TimePickerDialog newMeetingTimePickerDialog;
+
+         meetingTime.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public boolean onClick(View v) {
+
+        newMeetingTimePickerDialog  = new TimePickerDialog( meetingTime.getContext(),
+        new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker,  int hour, int minute) {
+        timePicker.setHour(hour);
+        timePicker.setMinute(minute);
+        meetingTime.setText(timePicker.getHour() + "h" + timePicker.getMinute());
+        resetTime.setVisibility(View.VISIBLE);
+        }
+        });
+        return false;
+        }
+
+        });
+         */
+        View timePickerView = LayoutInflater.from(getActivity())
+                .inflate(R.layout.time_picker,null);
+        newMeetingTimePicker = timePickerView.findViewById(R.id.time_picker);
         newMeetingTimePicker.setIs24HourView(true); // à mettre peut-être dans le profil utilisateur ou lié à la locale
         newMeetingTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
@@ -239,7 +289,6 @@ public class NewMeetingDialog extends DialogFragment {
         });
 
         TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
                 newMeetingTimePicker.setHour(hour);
@@ -318,7 +367,7 @@ public class NewMeetingDialog extends DialogFragment {
         mandatoryRoom = view.findViewById(R.id.mandatoryRoom);
 
         roomPicklistAdaptor.add(getActivity().getString(R.string.none_room));  // String vide pour dire qu'on ne sélectionne aucune room
-        for (Room room : InitData.mRoomsGlobal) roomPicklistAdaptor.add(room.getName());
+        for (Room room : InitData.getRoomsGlobal()) roomPicklistAdaptor.add(room.getName());
 
         roomSpinner.setSelection(0); // par défaut rien de sélectionné
         mandatoryRoom.setVisibility(View.VISIBLE);
@@ -357,33 +406,65 @@ public class NewMeetingDialog extends DialogFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void manageUsers(View view) {
-        usersSpinner = view.findViewById(R.id.meeting_users);
+        meetingUsers = view.findViewById(R.id.meeting_users);
+        String[] usersNames = new String[InitData.getUsersGlobal().size()];
+        currentUsersSelection = new boolean[InitData.getUsersGlobal().size()];
+
+        for (int i = 0; i < InitData.getUsersGlobal().size(); i++) {
+            usersNames[i] = InitData.getUsersGlobal().get(i).getUser();
+            currentUsersSelection[i] = false;
+        }
+
+        meetingUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager manager = ((AppCompatActivity) getActivity()).getSupportFragmentManager();
+                usersPickerDialog = new MultiPicker().MultiPicker(usersNames, currentUsersSelection, getString(R.string.select_users));
+          usersPickerDialog.show(manager, "users");
+
+
+  //           manager.executePendingTransactions();
+
+                usersPickerDialog.getDialog().setOnDismissListener( new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        boolean[] selection = usersPickerDialog.getSelected();
+
+                        String s = "";
+                        for (int i = 0; i < selection.length; i++) {
+                            if (selection[i]) {
+                                s += InitData.getUsersGlobal().get(i).getUser().toString() + "\n";
+                                currentUsersSelection[i] = true;
+                            }
+                        }
+                        meetingUsers.setText(s);
+                        meetingUsers.setTextSize(10);
+                    }
+                });
+
+            }
+ /**           public void OnDismissListener() {
+                boolean[] selection = usersPickerDialog.getSelected();
+
+                String s="";
+                for (int i =0; i<selection.length; i++) {
+                    if (selection[i])
+                    s += InitData.getUsersGlobal().get(i).getUser().toString() + "\n";
+                }
+                meetingUsers.setText(s);
+            }
+  */
+        });
+
+
         clearUsers = view.findViewById(R.id.clear_users);
 
-        List<String> usersNames = new ArrayList<String>();
-        usersNames.add(""); // String vide pour dire qu'on ne sélectionne personne
-
-        for (User user : InitData.mUsersGlobal) usersNames.add(user.getUser());
-        usersSpinner.setItems(usersNames, "Personne");
-
-        // juste après avoir sélectionné un user dans le spinner, on positionne l'icone clearUsers
-        usersSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (usersSpinner.getSelectedItemPosition() == 0)
-                    clearUsers.setVisibility(View.GONE);
-                else clearUsers.setVisibility(View.VISIBLE);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // code à écrire au cas où on agit sur rien sélectionné
-            }
-        });
         clearUsers.setOnClickListener(fv -> {
-            usersSpinner.setSelection(0); // par défaut rien de sélectionné
+            usersPickerDialog.clearSelectedValues();
             clearUsers.setVisibility(View.GONE);
         });
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void resetNewMeeting() {
@@ -409,7 +490,8 @@ public class NewMeetingDialog extends DialogFragment {
         clearNewRoom.setVisibility(View.GONE);
         roomSpinner.setBackgroundColor(Color.alpha(0));
 
-        usersSpinner.setSelection(0); // par défaut rien de sélectionné
+        meetingUsers.setText(R.string.none_user);
+//        usersPickerDialog.clearSelectedValues();
         clearUsers.setVisibility(View.GONE);
     }
     @RequiresApi(api = Build.VERSION_CODES.O)

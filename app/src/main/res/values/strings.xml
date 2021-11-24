@@ -14,7 +14,7 @@
     <string name="reset_time">Réinitialiser l\'heure</string>
     <string name="reset_duration">Réinitialiser la durée</string>
     <string name="reset_all">Réinitialiser</string>
-
+    <string name="all">Tout</string>
     <string name="meeting_date">Date</string>
     <string name="meeting_start">Début</string>
     <string name="meeting_end">Fin</string>
@@ -33,7 +33,7 @@
     <string name="none_room">Aucune</string>
     <string name="none_user">Aucun</string>
     <string name="meeting_average_duration">45</string>
-
+    <string name="select_users">Sélectionner les participants</string>
     <string name="from">De :</string>
     <string name="to">à</string>
 

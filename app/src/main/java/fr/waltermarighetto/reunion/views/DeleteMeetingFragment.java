@@ -18,27 +18,24 @@ import fr.waltermarighetto.reunion.model.InitData;
 public class DeleteMeetingFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        builder.setMessage(R.string.meeting_to_be_deleted)
+        return new AlertDialog.Builder(getActivity())
+                .setMessage(R.string.meeting_to_be_deleted)
                 .setView(inflater.inflate(R.layout.dialog_delete_meeting,null))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onClick(DialogInterface dialog, int id) {
-                        InitData.mMeetingsGlobal.remove(id);
+                        InitData.getMeetingsGlobal().remove(id);
                         FilterMeetings.FilterMeetings();
                         MainActivity.mMeetingsAdapter.notifyDataSetChanged();
-                        dismiss();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
                     }
-                });
-        // Create the AlertDialog object and return it
-        return builder.create();
+                })
+                .create();
     }
 }

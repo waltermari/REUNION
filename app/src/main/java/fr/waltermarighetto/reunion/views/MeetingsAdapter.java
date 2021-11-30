@@ -32,8 +32,8 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
     private Context mContext;
 
     // Tableau de couleur des salles
-    int[] roomColors = {Color.BLUE, Color.GREEN, Color.BLACK, Color.RED,
-            Color.CYAN, Color.GRAY, Color.MAGENTA, Color.YELLOW, Color.DKGRAY, Color.LTGRAY};
+ //   int[] roomColors = {Color.BLUE, Color.GREEN, Color.BLACK, Color.RED,
+  //          Color.CYAN, Color.GRAY, Color.MAGENTA, Color.YELLOW, Color.DKGRAY, Color.LTGRAY};
 
     public MeetingsAdapter(Context context, List<Meeting> dataset ) {
         this.aDataset = dataset;
@@ -65,7 +65,8 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
         holder.mTextUsers.setText(s);
 
         Room ro = aDataset.get(position).getRoom();
-        holder.mImageStatus.setBackgroundColor(ro.getColor());
+        holder.mImageStatus.setColorFilter(ro.getColor());
+         //       setBackgroundColor(ro.getColor());
   //      for (int i = 0; i < InitData.getRoomsGlobal().size(); i++) {
   //          if (ro.getName().toString().equals( InitData.getRoomsGlobal().get(i).getName().toString())) {
   //              holder.mImageStatus.setBackgroundColor(roomColors[i]);
@@ -101,17 +102,7 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
             mTextRoom = itemView.findViewById(R.id.item_room);
             mTextUsers = itemView.findViewById(R.id.item_users);
 
-            //          itemView.setOnClickListener(new View.OnClickListener() {
-            //              @RequiresApi(api = Build.VERSION_CODES.O)
-            //               @Override
-            //              public void onClick(View v) {
 
-            //                  new DeleteMeetingDialog(itemView.getContext(),
-            //                           getAdapterPosition());
-//                            .show();
-//
-            //              }
-            //        });
             mImageRemove.setOnClickListener(new View.OnClickListener() {
 
                 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -121,17 +112,9 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
 
                             FragmentManager manager =  ((AppCompatActivity)mContext).getSupportFragmentManager();
                             DeleteMeetingDialog dialog = new DeleteMeetingDialog(mContext, getAdapterPosition());
-                            dialog.show(manager, "Dialog");
+                            dialog.show(manager, "delete");
                         }
 
-   //                 new DeleteMeetingDialog().DeleteMeetingDialog(itemView.getContext(),
-   //                         getAdapterPosition()).show();
-
-                    //                   new DeleteMeetingDialog(itemView.getContext(), getAdapterPosition()).show();
-                    //                   DeleteMeetingFragment truc = new DeleteMeetingFragment(itemView.getContext(), getAdapterPosition());
-                    //                 truc.show();
-                    //                     DeleteMeetingFragment.show();
-   //             }
             });
         }
 

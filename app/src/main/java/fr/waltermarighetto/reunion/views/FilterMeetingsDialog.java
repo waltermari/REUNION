@@ -70,7 +70,7 @@ public class FilterMeetingsDialog extends DialogFragment {
         };
 
         // on crée AlertDialog
-        return new AlertDialog.Builder(getActivity())
+        AlertDialog dialog =  new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.filter_meetings)
                 .setView(v)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -92,18 +92,23 @@ public class FilterMeetingsDialog extends DialogFragment {
                             clearRoom.setVisibility(View.VISIBLE);
                         }
 
-                        Toast.makeText(getActivity(), "OK " + s, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getActivity(), "OK " + s, Toast.LENGTH_LONG).show();
                         FilterMeetings.FilterMeetings();
                         MainActivity.mMeetingsAdapter.notifyDataSetChanged();
 
                     }
                 })
-                .setNeutralButton(R.string.reset_all, new DialogInterface.OnClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //Reset
+                .setNeutralButton(R.string.reset_all, null)
+                .create();
 
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
                         filterRoomSpinner.setSelection(0);
                         clearRoom.setVisibility(View.GONE);
                         FilterMeetings.getFilterRoom().clear();
@@ -113,9 +118,13 @@ public class FilterMeetingsDialog extends DialogFragment {
                         FilterMeetings.FilterMeetings();
                         MainActivity.mMeetingsAdapter.notifyDataSetChanged();
                     }
-                })
-                .create();
+                });
 
+
+
+            }
+        });
+        return dialog;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

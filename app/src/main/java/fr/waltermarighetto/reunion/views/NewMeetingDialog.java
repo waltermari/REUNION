@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,26 +50,27 @@ import fr.waltermarighetto.reunion.model.Room;
 import fr.waltermarighetto.reunion.model.User;
 
 public class NewMeetingDialog extends DialogFragment {
-    TextView  meetingEndTime, mandatoryRoom, meetingUsers;
-    ImageView clearMeetingName, clearNewRoom, resetDate, resetTime, resetDuration, clearUsers;
-    EditText meetingName, meetingDate, meetingTime, meetingDuration ;
+    TextView  meetingEndTime, mandatoryRoom, mandatoryName, meetingUsers,meetingDate, meetingTime;
+    ImageView clearMeetingName, clearNewRoom, resetDate, resetTime, resetDuration;
+    EditText meetingName,  meetingDuration ;
     LocalDateTime mStart;
     LocalDateTime mEnd;
     TimePicker newMeetingTimePicker;
     Spinner roomSpinner;
     ArrayAdapter<String> roomPicklistAdaptor;
- //   UsersPicker usersPickerDialog;
     MultiPicker   usersPickerDialog;
-// MultiSpinner usersSpinner;
-boolean[] currentUsersSelection;
+    boolean[] currentUsersSelection;  // peut-on s'en passer ?
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+
         //on crée la vue à afficher
         View v = LayoutInflater.from(getActivity())
-                .inflate(R.layout.dialog_new_meeting,null);
+                .inflate(R.layout.dialog_new_meeting, null);
         // on prépare les données et listeners pour meeting Name, Date, Time, Duration, Room, Users
         manageName(v);
         manageDate(v);
@@ -78,16 +80,49 @@ boolean[] currentUsersSelection;
         manageUsers(v);
 
         resetNewMeeting();
+//////////////////////////////////////////////////
+        //on crée un bouton listener
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                // rajouter les actions
+            }
+        };
+        ///////////////////////////////////////////////////////////////
 
         // on crée AlertDialog
 
-        AlertDialog.Builder alDi = new AlertDialog.Builder(getActivity());
-        alDi
-                .setTitle(R.string.new_meeting_title)
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.new_meeting_title)
                 .setView(v)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
+                .setPositiveButton(R.string.ok, null)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //Cancel
+                    }
+                })
+                .setNeutralButton(R.string.reset_all, null)
+                .setCancelable(false);
+
+        AlertDialog dialog = builder.create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        // Reset new meeting
+                        resetNewMeeting();
+                    }
+                });
+
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
                         // Ok new meeting
                         boolean complete = true;
 
@@ -114,15 +149,18 @@ boolean[] currentUsersSelection;
                             currentMeeting.setEnd(mEnd);
 
                             // users
+                            String s = "";
+                            List<User> lUser = new ArrayList<User>();
 
-                            boolean[] selection = usersPickerDialog.getSelected();
+                            if (usersPickerDialog != null) {
+                                boolean[] selection = usersPickerDialog.getSelected();
 
-                            String s="";
-                            List<User> lUser= new ArrayList<User>();
-                            for (int i =0; i<selection.length; i++) {
-                                if(selection[i]) {
-                                    s += InitData.getUsersGlobal().get(i).getUser().toString() + "\n";
-                                    lUser.add(InitData.getUsersGlobal().get(i));
+
+                                for (int i = 0; i < selection.length; i++) {
+                                    if (selection[i]) {
+                                        s += InitData.getUsersGlobal().get(i).getUser().toString() + "\n";
+                                        lUser.add(InitData.getUsersGlobal().get(i));
+                                    }
                                 }
                             }
                             currentMeeting.setUsers(lUser);
@@ -132,36 +170,22 @@ boolean[] currentUsersSelection;
                             InitData.addSortedMeeting(currentMeeting);
                             FilterMeetings.FilterMeetings();
                             MainActivity.mMeetingsAdapter.notifyDataSetChanged();
-                            resetNewMeeting();
-                        } else {
-                            //que faire ? on doit éviter le dismiss()
-                            //alDi.create().show();
+                            //resetNewMeeting();
+                            //Dismiss once everything is OK.
+                            dialog.dismiss();
                         }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Cancel
-                    }
-                })
-                .setNeutralButton(R.string.reset_all, new DialogInterface.OnClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Reset new meeting
 
-                        resetNewMeeting();
-
-                        // alDi.create().show();
                     }
-                })
-        .setCancelable(false);
-
-        return alDi.create();
+                });
+            }
+        });
+        return dialog;
     }
 
     private void manageName(View view) {
         meetingName = view.findViewById(R.id.meeting_name);
         clearMeetingName = view.findViewById(R.id.clear_meeting_name);
+        mandatoryName = view.findViewById(R.id.mandatoryName);
 
         meetingName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -176,15 +200,20 @@ boolean[] currentUsersSelection;
             public void afterTextChanged(Editable editable) {
                 if (!meetingName.getText().toString().isEmpty()) {
                     clearMeetingName.setVisibility(View.VISIBLE);
-                    meetingName.setBackgroundColor(Color.alpha(0));
-                } else clearMeetingName.setVisibility(View.GONE);
+                    mandatoryName.setVisibility(View.GONE);
+                    meetingName.setBackgroundColor(getResources().getColor(R.color.grey));
+                } else {
+                    clearMeetingName.setVisibility(View.GONE);
+                    mandatoryName.setVisibility(View.VISIBLE);
+                }
             }
         });
 
         clearMeetingName.setOnClickListener(fv -> {
             meetingName.setText("");
-            meetingName.setHint(Html.fromHtml("<font color='red'>* </font><text>Objet de la réunion</text>"));
-            meetingName.setBackgroundColor(Color.alpha(0));
+            mandatoryName.setVisibility(View.VISIBLE);
+            meetingName.setHint(R.string.new_meeting_enter_name);
+            meetingName.setBackgroundColor(getResources().getColor(R.color.grey));
             clearMeetingName.setVisibility(View.GONE);
         });
     }
@@ -210,10 +239,25 @@ boolean[] currentUsersSelection;
                         mStart.getMinute(), mStart.getSecond());
                 // on calcule la date et heure de fin en fonction de la durée de la réunion
                 endTimeCalculation();
+                prepareRoomsToUseInAdapter();
                 // on positionne le bouton de réinitialisation de la date
                 resetDate.setVisibility(View.VISIBLE);
             }
         };
+
+        meetingDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    new DatePickerDialog(meetingDate.getContext(),
+                            date,
+                            newMeetingCalendar.get(Calendar.YEAR),
+                            newMeetingCalendar.get(Calendar.MONTH),
+                            newMeetingCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                          }
+        });
+
+/**
 
         meetingDate.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -229,7 +273,7 @@ boolean[] currentUsersSelection;
                 return (false);
             }
         });
-
+*/
         resetDate.setOnClickListener(fv -> {
             meetingDate.setText(LocalDateTime.now().toLocalDate().format(InitData.dtfDate));
             //   mStart avec date réinitialisée et heure conservée
@@ -242,6 +286,7 @@ boolean[] currentUsersSelection;
                     0);
             resetDate.setVisibility(View.GONE);
             endTimeCalculation();
+            prepareRoomsToUseInAdapter();
 
         });
     }
@@ -252,28 +297,7 @@ boolean[] currentUsersSelection;
         resetTime = view.findViewById(R.id.reset_time);
         meetingEndTime = view.findViewById(R.id.meeting_end_time);
 
-        /**       final TimePickerDialog newMeetingTimePickerDialog;
-
-         meetingTime.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public boolean onClick(View v) {
-
-        newMeetingTimePickerDialog  = new TimePickerDialog( meetingTime.getContext(),
-        new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker timePicker,  int hour, int minute) {
-        timePicker.setHour(hour);
-        timePicker.setMinute(minute);
-        meetingTime.setText(timePicker.getHour() + "h" + timePicker.getMinute());
-        resetTime.setVisibility(View.VISIBLE);
-        }
-        });
-        return false;
-        }
-
-        });
-         */
-        View timePickerView = LayoutInflater.from(getActivity())
+          View timePickerView = LayoutInflater.from(getActivity())
                 .inflate(R.layout.time_picker,null);
         newMeetingTimePicker = timePickerView.findViewById(R.id.time_picker);
         newMeetingTimePicker.setIs24HourView(true); // à mettre peut-être dans le profil utilisateur ou lié à la locale
@@ -284,6 +308,7 @@ boolean[] currentUsersSelection;
                 mStart = LocalDateTime.of(mStart.getYear(), mStart.getMonth(), mStart.getDayOfMonth(),
                         hourOfDay, minute, 0);
                 endTimeCalculation();
+                prepareRoomsToUseInAdapter();
                 resetTime.setVisibility(View.VISIBLE);
             }
         });
@@ -298,6 +323,19 @@ boolean[] currentUsersSelection;
             }
         };
 
+        meetingTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public  void onClick(View v) {
+                new TimePickerDialog(meetingTime.getContext(),
+                            timeSetListener,
+                            newMeetingTimePicker.getHour(),
+                            newMeetingTimePicker.getMinute(), false).show();
+
+                }
+
+            });
+
+  /**
         meetingTime.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")
             @Override
@@ -312,7 +350,7 @@ boolean[] currentUsersSelection;
                 return (false);
             }
         });
-
+*/
         resetTime.setOnClickListener(fv -> {
             meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitData.dtfTime));
             mStart = LocalDateTime.of(mStart.getYear(),
@@ -323,6 +361,7 @@ boolean[] currentUsersSelection;
                     0);
             resetTime.setVisibility(View.GONE);
             endTimeCalculation();
+            prepareRoomsToUseInAdapter();
         });
 
     }
@@ -346,12 +385,14 @@ boolean[] currentUsersSelection;
                     resetDuration.setVisibility(View.GONE);
                 else resetDuration.setVisibility(View.VISIBLE);
                 endTimeCalculation();
+                prepareRoomsToUseInAdapter();
             }
         });
 
         resetDuration.setOnClickListener(fv -> {
             meetingDuration.setText(getActivity().getString(R.string.meeting_average_duration));
             endTimeCalculation();
+            prepareRoomsToUseInAdapter();
             resetDuration.setVisibility(View.GONE);
         });
 
@@ -366,13 +407,13 @@ boolean[] currentUsersSelection;
         clearNewRoom = view.findViewById(R.id.clear_room);
         mandatoryRoom = view.findViewById(R.id.mandatoryRoom);
 
-        roomPicklistAdaptor.add(getActivity().getString(R.string.none_room));  // String vide pour dire qu'on ne sélectionne aucune room
-        for (Room room : InitData.getRoomsGlobal()) roomPicklistAdaptor.add(room.getName());
 
         roomSpinner.setSelection(0); // par défaut rien de sélectionné
+        prepareRoomsToUseInAdapter();
+
         mandatoryRoom.setVisibility(View.VISIBLE);
         clearNewRoom.setVisibility(View.GONE);
-        roomSpinner.setAdapter(roomPicklistAdaptor);
+
 
         // juste après avoir sélectionné une salle de réunion dans le spinner,
         // on positionne l'icone delete room et le champ mandatoryRoom
@@ -405,6 +446,40 @@ boolean[] currentUsersSelection;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+
+    private void prepareRoomsToUseInAdapter() {
+        String  roomSelectedName = getString(R.string.select_a_room);
+        int roomSelectedId =0;
+        if (roomSpinner.getSelectedItemPosition() !=0)
+        roomSelectedName = roomPicklistAdaptor.getItem(roomSpinner.getSelectedItemPosition()).toString();
+
+        roomPicklistAdaptor.clear();
+        roomPicklistAdaptor.add(getActivity().getString(R.string.select_a_room));  // String vide pour dire qu'on ne sélectionne aucune room
+
+        for (Room room : InitData.getRoomsGlobal()) {
+            boolean keepRoom = true;
+            if (mStart != null && mEnd != null) {
+                for (Meeting meeting : InitData.getMeetingsGlobal()) {
+                    if (meeting.getRoom().equals(room) && mStart.isBefore(meeting.getEnd())
+                            && mEnd.isAfter(meeting.getStart())) {
+                        keepRoom = false;
+                        break;
+                    }
+                }
+            }
+            if (keepRoom == true) {
+                roomPicklistAdaptor.add(room.getName());
+                // on ne peut pas garder la sélection sur une salle qui n'est pas dans la liste
+                if (room.getName().equals(roomSelectedName))
+                    roomSelectedId = roomPicklistAdaptor.getCount() - 1;
+            }
+        }
+
+        roomSpinner.setAdapter(roomPicklistAdaptor);
+        roomSpinner.setSelection(roomSelectedId);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void manageUsers(View view) {
         meetingUsers = view.findViewById(R.id.meeting_users);
         String[] usersNames = new String[InitData.getUsersGlobal().size()];
@@ -415,62 +490,45 @@ boolean[] currentUsersSelection;
             currentUsersSelection[i] = false;
         }
 
+        //on crée un  listener pour traiter OK multiPicker
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                boolean[] selection = usersPickerDialog.getSelected();
+
+                String s = "";
+                for (int i = 0; i < selection.length; i++) {
+
+                    if (selection[i]) {
+                        s += InitData.getUsersGlobal().get(i).getUser().toString() + "\n";
+                        currentUsersSelection[i] = true;
+                    } else currentUsersSelection[i] = false;
+                }
+                if (s=="") s=getString(R.string.none_user);
+                meetingUsers.setText(s);
+
+            }
+        };
+
         meetingUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager manager = ((AppCompatActivity) getActivity()).getSupportFragmentManager();
-                usersPickerDialog = new MultiPicker().MultiPicker(usersNames, currentUsersSelection, getString(R.string.select_users));
-          usersPickerDialog.show(manager, "users");
-
-
-  //           manager.executePendingTransactions();
-
-                usersPickerDialog.getDialog().setOnDismissListener( new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        boolean[] selection = usersPickerDialog.getSelected();
-
-                        String s = "";
-                        for (int i = 0; i < selection.length; i++) {
-                            if (selection[i]) {
-                                s += InitData.getUsersGlobal().get(i).getUser().toString() + "\n";
-                                currentUsersSelection[i] = true;
-                            }
-                        }
-                        meetingUsers.setText(s);
-                        meetingUsers.setTextSize(10);
-                    }
-                });
-
+                //             if (manager.findFragmentByTag("users") != null) return;
+                usersPickerDialog = new MultiPicker().MultiPicker(usersNames, currentUsersSelection, getString(R.string.select_users), listener);
+                usersPickerDialog.show(manager, "users");
             }
- /**           public void OnDismissListener() {
-                boolean[] selection = usersPickerDialog.getSelected();
-
-                String s="";
-                for (int i =0; i<selection.length; i++) {
-                    if (selection[i])
-                    s += InitData.getUsersGlobal().get(i).getUser().toString() + "\n";
-                }
-                meetingUsers.setText(s);
-            }
-  */
         });
 
-
-        clearUsers = view.findViewById(R.id.clear_users);
-
-        clearUsers.setOnClickListener(fv -> {
-            usersPickerDialog.clearSelectedValues();
-            clearUsers.setVisibility(View.GONE);
-        });
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void resetNewMeeting() {
-        meetingName.setBackgroundColor(Color.alpha(0));
+        meetingName.setBackgroundColor(getResources().getColor(R.color.grey));
         meetingName.setText("");
-        meetingName.setHint(Html.fromHtml("<font color='red'>* </font><text>Objet de la réunion</text>"));
+        mandatoryName.setVisibility(View.VISIBLE);
+        meetingName.setHint(R.string.new_meeting_enter_name);
         clearMeetingName.setVisibility(View.GONE);
 
         meetingDate.setText(LocalDateTime.now().toLocalDate().format(InitData.dtfDate));
@@ -492,7 +550,6 @@ boolean[] currentUsersSelection;
 
         meetingUsers.setText(R.string.none_user);
 //        usersPickerDialog.clearSelectedValues();
-        clearUsers.setVisibility(View.GONE);
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void endTimeCalculation() {

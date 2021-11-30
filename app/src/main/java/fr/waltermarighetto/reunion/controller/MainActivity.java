@@ -66,11 +66,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 FragmentManager manager = getSupportFragmentManager();
-                if (manager.findFragmentByTag("dialog") != null) {
-          //          manager.findFragmentByTag("dialog").setReenterTransition();
-                }
+                if (manager.findFragmentByTag("newmeeting") != null) return;
+
+
                     NewMeetingDialog dialog = new NewMeetingDialog();
-                dialog.show(manager, "dialog");
+                dialog.show(manager, "newmeeting");
             }
         });
     }

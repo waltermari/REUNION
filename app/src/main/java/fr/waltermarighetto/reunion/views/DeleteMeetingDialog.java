@@ -32,7 +32,7 @@ public class DeleteMeetingDialog extends DialogFragment {
     public  DeleteMeetingDialog(Context context, int id) {
         idToDelete = id;
         mContext = context;
-        meeting_to_delete = InitData.getMeetingsGlobal().get(idToDelete);
+        meeting_to_delete = FilterMeetings.getFilteredMeetings().get(idToDelete);
 
         // Build the message :
         message = context.getString(R.string.meeting_name) + "\n"
@@ -79,7 +79,11 @@ public class DeleteMeetingDialog extends DialogFragment {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onClick(DialogInterface dialog, int id) {
                         //OK
-                        InitData.getMeetingsGlobal().remove(idToDelete);
+                        for (int i = 0; i< InitData.getMeetingsGlobal().size(); i++ )
+                            if (meeting_to_delete.equals(InitData.getMeetingsGlobal().get(i))) {
+                                InitData.getMeetingsGlobal().remove(i);
+                                break;
+                            }
                         FilterMeetings.FilterMeetings();
                         MainActivity.mMeetingsAdapter.notifyDataSetChanged();
                     }

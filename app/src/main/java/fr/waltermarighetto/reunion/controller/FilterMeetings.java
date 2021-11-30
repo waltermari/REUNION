@@ -14,8 +14,6 @@ import fr.waltermarighetto.reunion.model.InitData;
 import fr.waltermarighetto.reunion.model.Meeting;
 
 
-
-
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class FilterMeetings {
 
@@ -71,6 +69,9 @@ public class FilterMeetings {
         if (rooms == null)
             filterRoom.clear();
         else filterRoom = rooms;
+    }
+    public static List<Meeting> getFilteredMeetings() {
+        return meetings;
     }
 }
 

@@ -81,7 +81,7 @@
         android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:clickable="true"
         android:focusable="true"
-android:background="@color/grey"
+        android:background="@color/grey"
         android:maxLines="1"
         android:text=" jeudi 14/10/2021"
         android:textAlignment="viewStart"
@@ -186,7 +186,7 @@ android:background="@color/grey"
         app:layout_constraintEnd_toStartOf="@id/icons_guideline"
         app:layout_constraintStart_toEndOf="@id/labels_guideline"
         app:layout_constraintTop_toTopOf="@id/time_end_label"
-         app:layout_constraintBottom_toBottomOf="@id/time_end_label"/>
+        app:layout_constraintBottom_toBottomOf="@id/time_end_label"/>
 
 
     <TextView
@@ -289,7 +289,7 @@ android:background="@color/grey"
         android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:background="@color/grey"
 
-
+        android:drawSelectorOnTop="true"
         android:hint="@string/select_a_room"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textAlignment="viewStart"
@@ -352,8 +352,7 @@ android:background="@color/grey"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/users_label"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:layout_constraintTop_toBottomOf="@id/users_label" />
 
 
     <androidx.constraintlayout.widget.Guideline

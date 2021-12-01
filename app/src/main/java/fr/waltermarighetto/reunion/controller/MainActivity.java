@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         // configure Refresh avec SwipeRefreshLayout
         refreshMeetingsDisplay();
     }
+
     private void manageMeetingsDisplay() {
         RecyclerView mRecycler = findViewById(R.id.meetings_recycler_view);
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -64,10 +65,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.new_meeting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 FragmentManager manager = getSupportFragmentManager();
                 if (manager.findFragmentByTag("newmeeting") != null) return;
-
 
                     NewMeetingDialog dialog = new NewMeetingDialog();
                 dialog.show(manager, "newmeeting");
@@ -88,17 +87,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     // on met le bouton de filtre par date et/ou salle dans la barre d'actions (menu)
-
 
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected (MenuItem item){

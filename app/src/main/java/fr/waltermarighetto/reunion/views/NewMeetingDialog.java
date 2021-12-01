@@ -239,7 +239,7 @@ public class NewMeetingDialog extends DialogFragment {
                         mStart.getMinute(), mStart.getSecond());
                 // on calcule la date et heure de fin en fonction de la durée de la réunion
                 endTimeCalculation();
-                prepareRoomsToUseInAdapter();
+                availableRooms();
                 // on positionne le bouton de réinitialisation de la date
                 resetDate.setVisibility(View.VISIBLE);
             }
@@ -257,23 +257,7 @@ public class NewMeetingDialog extends DialogFragment {
                           }
         });
 
-/**
 
-        meetingDate.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    new DatePickerDialog(meetingDate.getContext(),
-                            date,
-                            newMeetingCalendar.get(Calendar.YEAR),
-                            newMeetingCalendar.get(Calendar.MONTH),
-                            newMeetingCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                    return (true);
-                }
-                return (false);
-            }
-        });
-*/
         resetDate.setOnClickListener(fv -> {
             meetingDate.setText(LocalDateTime.now().toLocalDate().format(InitData.dtfDate));
             //   mStart avec date réinitialisée et heure conservée
@@ -286,7 +270,7 @@ public class NewMeetingDialog extends DialogFragment {
                     0);
             resetDate.setVisibility(View.GONE);
             endTimeCalculation();
-            prepareRoomsToUseInAdapter();
+            availableRooms();
 
         });
     }
@@ -308,7 +292,7 @@ public class NewMeetingDialog extends DialogFragment {
                 mStart = LocalDateTime.of(mStart.getYear(), mStart.getMonth(), mStart.getDayOfMonth(),
                         hourOfDay, minute, 0);
                 endTimeCalculation();
-                prepareRoomsToUseInAdapter();
+                availableRooms();
                 resetTime.setVisibility(View.VISIBLE);
             }
         });
@@ -335,22 +319,7 @@ public class NewMeetingDialog extends DialogFragment {
 
             });
 
-  /**
-        meetingTime.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    new TimePickerDialog(meetingTime.getContext(),
-                            timeSetListener,
-                            newMeetingTimePicker.getHour(),
-                            newMeetingTimePicker.getMinute(), false).show();
-                    return (true);
-                }
-                return (false);
-            }
-        });
-*/
+
         resetTime.setOnClickListener(fv -> {
             meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitData.dtfTime));
             mStart = LocalDateTime.of(mStart.getYear(),
@@ -361,7 +330,7 @@ public class NewMeetingDialog extends DialogFragment {
                     0);
             resetTime.setVisibility(View.GONE);
             endTimeCalculation();
-            prepareRoomsToUseInAdapter();
+            availableRooms();
         });
 
     }
@@ -385,14 +354,14 @@ public class NewMeetingDialog extends DialogFragment {
                     resetDuration.setVisibility(View.GONE);
                 else resetDuration.setVisibility(View.VISIBLE);
                 endTimeCalculation();
-                prepareRoomsToUseInAdapter();
+                availableRooms();
             }
         });
 
         resetDuration.setOnClickListener(fv -> {
             meetingDuration.setText(getActivity().getString(R.string.meeting_average_duration));
             endTimeCalculation();
-            prepareRoomsToUseInAdapter();
+            availableRooms();
             resetDuration.setVisibility(View.GONE);
         });
 
@@ -409,7 +378,7 @@ public class NewMeetingDialog extends DialogFragment {
 
 
         roomSpinner.setSelection(0); // par défaut rien de sélectionné
-        prepareRoomsToUseInAdapter();
+        availableRooms();
 
         mandatoryRoom.setVisibility(View.VISIBLE);
         clearNewRoom.setVisibility(View.GONE);
@@ -447,7 +416,7 @@ public class NewMeetingDialog extends DialogFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
 
-    private void prepareRoomsToUseInAdapter() {
+    private void availableRooms() {
         String  roomSelectedName = getString(R.string.select_a_room);
         int roomSelectedId =0;
         if (roomSpinner.getSelectedItemPosition() !=0)
@@ -513,10 +482,15 @@ public class NewMeetingDialog extends DialogFragment {
         meetingUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager manager = ((AppCompatActivity) getActivity()).getSupportFragmentManager();
+
+               FragmentManager manager = ((AppCompatActivity) getActivity()).getSupportFragmentManager();
                 //             if (manager.findFragmentByTag("users") != null) return;
-                usersPickerDialog = new MultiPicker().MultiPicker(usersNames, currentUsersSelection, getString(R.string.select_users), listener);
-                usersPickerDialog.show(manager, "users");
+          //      usersPickerDialog = new MultiPicker().MultiPicker(usersNames, currentUsersSelection, getString(R.string.select_users), listener);
+         //    usersPickerDialog.show(manager, "users");
+            usersPickerDialog = MultiPicker.getInstance(usersNames,
+                    currentUsersSelection, getString(R.string.select_users), listener, getContext());
+        //       usersPickerDialog.show(manager, "users");
+
             }
         });
 

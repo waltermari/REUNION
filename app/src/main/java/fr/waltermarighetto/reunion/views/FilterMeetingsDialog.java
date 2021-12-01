@@ -42,17 +42,14 @@ import fr.waltermarighetto.reunion.views.NewMeetingDialog;
 
 public class FilterMeetingsDialog extends DialogFragment {
 
-
     ImageView clearRoom;
     Spinner filterRoomSpinner;
     EditText filterDateEditText;
     CalendarView filterCalendarView;
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
-        //on crée la vue à afficher
         View v = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_filter_meetings, null);
 
@@ -60,16 +57,6 @@ public class FilterMeetingsDialog extends DialogFragment {
         prepareRoomSpinner(v);
         initWithCurrentFilters();
 
-
-        //on crée un bouton listener
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-        // rajouter les actions
-            }
-        };
-
-        // on crée AlertDialog
         AlertDialog dialog =  new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.filter_meetings)
                 .setView(v)
@@ -119,9 +106,6 @@ public class FilterMeetingsDialog extends DialogFragment {
                         MainActivity.mMeetingsAdapter.notifyDataSetChanged();
                     }
                 });
-
-
-
             }
         });
         return dialog;
@@ -133,7 +117,6 @@ public class FilterMeetingsDialog extends DialogFragment {
         filterRoomSpinner.setSelection(0);
 
         if (FilterMeetings.getFilterRoom().size() != 0) {
-
             for (String s : FilterMeetings.getFilterRoom()) {
                 for( int i=0; i < InitData.getRoomsGlobal().size(); i++ ) {
                     if (s.toString().equals(InitData.getRoomsGlobal().get(i).getName())) {
@@ -147,7 +130,6 @@ public class FilterMeetingsDialog extends DialogFragment {
         filterDateEditText.setText("");
         if  (FilterMeetings.getFilterDate() != null)
             filterDateEditText.setText(FilterMeetings.getFilterDate().format(InitData.dtfDate));
-
     }
 
     private void prepareCalendar(View view) {

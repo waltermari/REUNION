@@ -30,12 +30,12 @@ public class InitData {
     private static List<User> mUsersGlobal;
     private static List<Room> mRoomsGlobal;
     private static List<Meeting> mMeetingsGlobal;
-
+// initialiser les formats en fonction de la locale (à faire)
     public static DateTimeFormatter dtfDateTime = DateTimeFormatter.ofPattern("eeee dd-MM-YYYY HH'h'mm");
     public static DateTimeFormatter dtfDate = DateTimeFormatter.ofPattern("eeee dd-MM-YYYY");
     public static DateTimeFormatter dtfDateShort = DateTimeFormatter.ofPattern("dd-MM-YYYY");
     public static DateTimeFormatter dtfTime = DateTimeFormatter.ofPattern("HH'h'mm");
-    public static SimpleDateFormat sdf = new SimpleDateFormat("EEEE dd/MM/yy", Locale.FRANCE);
+    public static SimpleDateFormat sdf = new SimpleDateFormat("EEEE dd/MM/yy", Locale.getDefault());
 
     {
         mUsersGlobal = new ArrayList<User>();
@@ -350,10 +350,6 @@ public class InitData {
             addSortedMeeting(mMeeting);
 
         }
-        //    mMeetingsGlobal.sort((Comparator<Meeting>  meeting, t1) -> {
-        //        meeting.getStart().isAfter(t1.getStart())
-        //                   LocaldateTime.compare
-        //       });
 
     }
     public static List<User> getUsersGlobal() {

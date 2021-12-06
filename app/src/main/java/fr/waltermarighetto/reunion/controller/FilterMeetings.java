@@ -17,11 +17,11 @@ import fr.waltermarighetto.reunion.model.Meeting;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class FilterMeetings {
 
-    public static LocalDate filterDate = null;
+    private static LocalDate filterDate = null;
     private static List<String> filterRoom = new ArrayList<String>();
 
     private static LocalDateTime timeToUseForChecks = LocalDateTime.now();
-    private static List<Meeting> meetings = new ArrayList<Meeting>();
+    private final static List<Meeting> meetings = new ArrayList<Meeting>();
 
 
     public static List<Meeting> FilterMeetings() {
@@ -34,7 +34,7 @@ public class FilterMeetings {
             timeToUseForChecks = LocalDateTime.now();
         else timeToUseForChecks = (LocalDateTime) filterDate.atStartOfDay();
 
-        for (fr.waltermarighetto.reunion.model.Meeting meet : InitData.getMeetingsGlobal()) {
+        for (Meeting meet : InitData.getMeetingsGlobal()) {
             if (meet.getEnd().isAfter(timeToUseForChecks)) { //le meeting n'est pas termminé
 
                 if (filterDate == null || filterDate.compareTo(meet.getStart().toLocalDate()) ==0) {   // le meeting a une bonne date

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ListView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,8 +36,9 @@ public class MultiPicker extends DialogFragment  {
         }
         mSelectedItems = selected;
         mValues = values;
-         String selectAllText = context.getString(R.string.all).toString();
-        
+        String selectAllText = context.getString(R.string.all).toString();
+        String selectNoneText = context.getString(R.string.nothing).toString();
+
         View v = LayoutInflater.from(context)
                 .inflate(R.layout.item_multi_selection, null);
 
@@ -76,10 +78,20 @@ public class MultiPicker extends DialogFragment  {
 
                     @Override
                     public void onClick(View view) {
+                        final ListView listview = mDialog.getListView();
                         if (button.getText().equals(selectAllText)) {
-                            selectAllValues();
+                            for (int i = 0; i < mValues.length; i++) {
+                                mSelectedItems[i] = true;
+                                listview.setItemChecked(i, true);
+                                button.setText(selectNoneText);
+                            }
                         } else {
-                            unselectAllValues();
+                            for (int i = 0; i < mValues.length; i++) {
+                                mSelectedItems[i] = false;
+                                listview.setItemChecked(i, false);
+
+                                button.setText(selectAllText);
+                            }
                         }
                     }
                 });

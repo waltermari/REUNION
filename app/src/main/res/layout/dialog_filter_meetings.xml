@@ -51,7 +51,7 @@
         app:layout_constraintStart_toEndOf="@id/icons_guideline"
         app:layout_constraintTop_toTopOf="@id/filter_room"
 
-        app:srcCompat="@drawable/ic_cancel_edition_black" />
+        app:srcCompat="@drawable/ic_cancel_edition" />
 
     <TextView
         android:id="@+id/textView"

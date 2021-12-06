@@ -34,7 +34,7 @@
         android:paddingHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:hint="@string/new_meeting_enter_name"
-        android:background="@color/grey"
+
         android:inputType="text"
         android:singleLine="true"
         android:textAlignment="viewStart"
@@ -47,7 +47,6 @@
         android:layout_width="52dp"
         android:layout_height="52dp"
 
-
         android:clickable="true"
         android:contentDescription="@string/delete_cross"
         android:focusable="true"
@@ -56,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icons_guideline"
         app:layout_constraintTop_toTopOf="@id/meeting_name"
-        app:srcCompat="@drawable/ic_cancel_edition_black" />
+        app:srcCompat="@drawable/ic_cancel_edition" />
 
     <!-- date de la réunion pour ouvrir calendrier -->
     <TextView
@@ -83,6 +82,7 @@
         android:focusable="true"
         android:background="@color/grey"
         android:maxLines="1"
+
         android:text=" jeudi 14/10/2021"
         android:textAlignment="viewStart"
 
@@ -96,19 +96,18 @@
         android:id="@+id/reset_date"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
+
         android:adjustViewBounds="false"
         android:clickable="true"
         android:contentDescription="@string/reset_date"
         android:focusable="true"
-        android:padding="4dp"
+        android:padding="14dp"
         app:layout_constraintBottom_toBottomOf="@id/meeting_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icons_guideline"
         app:layout_constraintTop_toTopOf="@id/meeting_date"
 
-        app:srcCompat="@drawable/reset" />
+        app:srcCompat="@drawable/ic_reset_edition" />
 
     <!-- heure de la réunion pour ouvrir le widget heure -->
 
@@ -133,8 +132,9 @@
         android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:clickable="true"
         android:focusable="true"
-        android:background="@color/grey"
+
         android:text="10:30"
+
         android:textAlignment="viewStart"
         app:layout_constraintEnd_toStartOf="@id/icons_guideline"
         app:layout_constraintStart_toEndOf="@id/labels_guideline"
@@ -145,17 +145,16 @@
         android:id="@+id/reset_time"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
+
         android:clickable="true"
         android:contentDescription="@string/reset_time"
         android:focusable="true"
-        android:padding="4dp"
+        android:padding="14dp"
         app:layout_constraintBottom_toBottomOf="@id/meeting_start_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icons_guideline"
         app:layout_constraintTop_toTopOf="@id/meeting_start_time"
-        app:srcCompat="@drawable/reset"
+        app:srcCompat="@drawable/ic_reset_edition"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <!-- heure de FIN la réunion sans bouton  widget heure -->
@@ -212,7 +211,7 @@
         android:inputType="number"
         android:maxLength="4"
         android:text="45"
-        android:background="@color/grey"
+
         android:textAlignment="viewStart"
         app:layout_constraintStart_toEndOf="@id/labels_guideline"
         app:layout_constraintTop_toTopOf="@id/duration_label"
@@ -235,18 +234,17 @@
         android:id="@+id/reset_duration"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:paddingHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginVertical="@dimen/activity_vertical_margin"
+
         android:layout_marginStart="8dp"
         android:clickable="true"
         android:contentDescription="@string/delete_cross"
         android:focusable="true"
-        android:padding="8dp"
+        android:padding="14dp"
         app:layout_constraintBottom_toBottomOf="@id/meeting_duration"
 
         app:layout_constraintStart_toEndOf="@id/duration_unit"
         app:layout_constraintTop_toTopOf="@id/meeting_duration"
-        app:srcCompat="@drawable/reset"
+        app:srcCompat="@drawable/ic_reset_edition"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <TextView
@@ -287,7 +285,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/activity_vertical_margin"
-        android:background="@color/grey"
+
 
         android:drawSelectorOnTop="true"
         android:hint="@string/select_a_room"
@@ -314,7 +312,7 @@
         app:layout_constraintStart_toEndOf="@id/icons_guideline"
 
         app:layout_constraintTop_toTopOf="@id/meeting_room_spinner"
-        app:srcCompat="@drawable/ic_cancel_edition_black" />
+        app:srcCompat="@drawable/ic_cancel_edition" />
 
 
     <TextView
@@ -339,12 +337,12 @@
         android:layout_height="wrap_content"
         android:maxHeight="96sp"
         android:minHeight="24sp"
-        android:background="@color/grey"
+
         android:paddingHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:isScrollContainer="true"
         android:scrollbars="vertical"
-        android:textIsSelectable="true"
+
         android:textSize="16sp"
         android:text="@string/none_user"
 

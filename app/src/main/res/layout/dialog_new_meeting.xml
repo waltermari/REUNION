@@ -80,7 +80,7 @@
         android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:clickable="true"
         android:focusable="true"
-        android:background="@color/grey"
+
         android:maxLines="1"
 
         android:text=" jeudi 14/10/2021"
@@ -337,7 +337,6 @@
         android:layout_height="wrap_content"
         android:maxHeight="96sp"
         android:minHeight="24sp"
-
         android:paddingHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginVertical="@dimen/activity_vertical_margin"
         android:isScrollContainer="true"

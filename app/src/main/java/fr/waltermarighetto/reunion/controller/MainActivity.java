@@ -1,5 +1,6 @@
 package fr.waltermarighetto.reunion.controller;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.fragment.app.FragmentManager;
@@ -8,29 +9,30 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-
-
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.widget.TextView;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 import fr.waltermarighetto.reunion.R;
 import fr.waltermarighetto.reunion.model.InitData;
 import fr.waltermarighetto.reunion.views.FilterMeetingsDialog;
 import fr.waltermarighetto.reunion.views.MeetingsAdapter;
+import fr.waltermarighetto.reunion.views.MainListener;
 import fr.waltermarighetto.reunion.views.NewMeetingDialog;
 
 @SuppressLint({"NewApi", "ResourceType"})
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity implements MainListener {
     // pour la fenêtre de dialogue du filtre sur les réunions
-    public static MeetingsAdapter mMeetingsAdapter;
+    public  static MeetingsAdapter mMeetingsAdapter;
+    private FilterMeetingsDialog filterMeetingsDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,40 +43,14 @@ public class MainActivity extends AppCompatActivity {
         new InitData();
 
         // préparation du Recycler View pour affichage des meetings
-        manageMeetingsDisplay();
-
-        // préparation accès création nouveau Meeting par FloatingActionButton
-        manageNewMeetingAccess();
-
-        // configure Refresh avec SwipeRefreshLayout
-        refreshMeetingsDisplay();
-    }
-
-    private void manageMeetingsDisplay() {
         RecyclerView mRecycler = findViewById(R.id.meetings_recycler_view);
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mRecycler.setItemAnimator(new DefaultItemAnimator());
-        mMeetingsAdapter = new MeetingsAdapter(this, new FilterMeetings().FilterMeetings());
+        new FilterMeetings();
+        mMeetingsAdapter = new MeetingsAdapter(this, FilterMeetings.FilterMeetings());
         mRecycler.setAdapter(mMeetingsAdapter);
-    }
 
-    private void manageNewMeetingAccess() {
-
-        // Accès au dialogue de création d'un nouveau Meeting
-
-        findViewById(R.id.new_meeting).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager manager = getSupportFragmentManager();
-                if (manager.findFragmentByTag("newmeeting") != null) return;
-
-                    NewMeetingDialog dialog = new NewMeetingDialog();
-                dialog.show(manager, "newmeeting");
-            }
-        });
-    }
-
-    private void refreshMeetingsDisplay() {
+        // configure Refresh avec SwipeRefreshLayout
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -84,33 +60,97 @@ public class MainActivity extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-    }
 
+        // Accès au dialogue de création d'un nouveau Meeting
+
+        findViewById(R.id.new_meeting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager manager = getSupportFragmentManager();
+                if (manager.findFragmentByTag("newmeeting") != null) return;
+
+                NewMeetingDialog dialog = new NewMeetingDialog();
+                dialog.show(manager, "newmeeting");
+
+            }
+        });
+    }
 
     // on met le bouton de filtre par date et/ou salle dans la barre d'actions (menu)
 
     @Override
-    public boolean onCreateOptionsMenu (Menu menu){
+    public boolean onPrepareOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        final MenuItem menuItem = menu.findItem(R.id.filter_meetings);
+
+        View actionView = menuItem.getActionView();
+        TextView textBadgeView = actionView.findViewById(R.id.filter_badge);
+        String s = "";
+        if (textBadgeView != null) {
+            if (!FilterMeetings.getFilterRoom().isEmpty()) s = s + "R";
+            if (FilterMeetings.getFilterDate() != null) s = s + "D";
+
+            if (s == "") {
+                if (textBadgeView.getVisibility() != View.GONE)
+                    textBadgeView.setVisibility(View.GONE);
+            } else {
+                textBadgeView.setText(s);
+                if (textBadgeView.getVisibility() != View.VISIBLE)
+                    textBadgeView.setVisibility(View.VISIBLE);
+            }
+        }
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected (MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         // devrait être remplacé par un accès direct car il n'y a qu'une possibilité
         // mais structure conservée au cas où on rajoute un item de menu
         switch (item.getItemId()) {
             case R.id.filter_meetings:
-                FragmentManager manager = getSupportFragmentManager();
-             FilterMeetingsDialog filterMeetingsDialog =  new FilterMeetingsDialog();
-                filterMeetingsDialog.show(manager, "Dialog");
+              FragmentManager manager = getSupportFragmentManager();
+                if (manager.findFragmentByTag("filterdialog") != null) return true;
+              FilterMeetingsDialog filterMeetingsDialog = new FilterMeetingsDialog();
+              Bundle args = new Bundle();
+                String[] roomsNames = new String[FilterMeetings.getFilterRoom().size()];
+                int i=0;
+                while (i<FilterMeetings.getFilterRoom().size()) {
+                    roomsNames[i] = FilterMeetings.getFilterRoom().get(i);
+                    i++;
+                }
+              args.putStringArray("ROOMS", roomsNames);
+                if (FilterMeetings.getFilterDate()== null)
+                    args.putString("DATE",  "");
+
+              else args.putString("DATE",  FilterMeetings.getFilterDate().toString());
+                filterMeetingsDialog.setArguments(args);
+                filterMeetingsDialog.show(manager, "filterdialog");
+
                 return true;
 
         }
         return (super.onOptionsItemSelected(item));
 
     }
-}
 
+    @Override
+    public void onFiltersUpdated(ArrayList<String> roomNames, LocalDate date) {
+        FilterMeetings.setFilterDate(date);
+        FilterMeetings.setFilterRoom(roomNames);
+        FilterMeetings.FilterMeetings();
+        mMeetingsAdapter.notifyDataSetChanged();
+        invalidateOptionsMenu();
+
+    }
+
+
+}
 
 

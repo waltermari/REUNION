@@ -15,38 +15,52 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+
+import java.util.ArrayList;
 
 import fr.waltermarighetto.reunion.R;
 import fr.waltermarighetto.reunion.controller.MainActivity;
 import fr.waltermarighetto.reunion.model.InitData;
 
 public class MultiPicker extends DialogFragment  {
-    private static Object mInstance;
+    //   private static Object mInstance;
     private static String[] mValues;
     private static boolean[] mSelectedItems;
     private static AlertDialog mDialog;
+    private Context mContext;
+    private DialogInterface.OnClickListener mListener;
 
-    public static MultiPicker getInstance(String[] values, boolean[] selected, String title,
-                                          DialogInterface.OnClickListener listener, Context context) {
-        if (mInstance == null) {
-            mInstance = new MultiPicker();
-        }
-        mSelectedItems = selected;
-        mValues = values;
-        String selectAllText = context.getString(R.string.all).toString();
-        String selectNoneText = context.getString(R.string.nothing).toString();
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Dialog onCreateDialog(Bundle savedInstanceState){
+        Bundle args = getArguments();
+        mValues = args.getStringArray("USERS");
+        mSelectedItems =args.getBooleanArray("SELECTED");
 
-        View v = LayoutInflater.from(context)
+
+
+
+//    public static MultiPicker getInstance(String[] values, boolean[] selected, String title,
+//                                          DialogInterface.OnClickListener listener, Context context) {
+//        if (mInstance == null) {
+//            mInstance = new MultiPicker();
+//        }
+//        mSelectedItems = selected;
+        //       mValues = values;
+        String selectAllText = mContext.getString(R.string.all).toString();
+        String selectNoneText = mContext.getString(R.string.nothing).toString();
+
+        View v = LayoutInflater.from(mContext)
                 .inflate(R.layout.item_multi_selection, null);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         int toggleText = R.string.nothing;
         for (boolean b : mSelectedItems) if (!b) {toggleText = R.string.all; break;};
         mDialog = builder
-                .setTitle(title)
+                .setTitle(args.getString("TITLE"))
                 .setMultiChoiceItems(mValues, mSelectedItems,
                         new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
@@ -61,13 +75,14 @@ public class MultiPicker extends DialogFragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //Cancel on ne fait rien du tout
-                        //                      unselectAllValues();
+
                     }
                 })
-                .setPositiveButton(R.string.ok, listener)
+                .setPositiveButton(R.string.ok, mListener)
                 .setNeutralButton( toggleText, null)
                 .setCancelable(false)
                 .create();
+
 
         mDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -97,9 +112,9 @@ public class MultiPicker extends DialogFragment  {
                 });
             }
         });
-        mDialog.show();
-        //       return mDialog;
-        return (MultiPicker) mInstance;
+        //       mDialog.show();
+        return mDialog;
+        //      return (MultiPicker) mInstance;
     }
 
     public static void unselectAllValues(){
@@ -114,5 +129,16 @@ public class MultiPicker extends DialogFragment  {
     public static boolean[] getSelected() {
         return mSelectedItems;
     }
+public void setListener(DialogInterface.OnClickListener listener) {
+        mListener = listener;
+}
 
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext=context;
+
+
+    }
 }

@@ -5,14 +5,9 @@
     <string name="delete_cross">Effacer</string>
 
     <string name="ok">OK</string>
-    <string name="clear">Effacer</string>
-    <string name="clear_all">Effacer tout</string>
     <string name="cancel">Annuler</string>
-    <string name="select_all">Tout sélectionner</string>
-    <string name="unselect_all">Sélectionner aucun</string>
     <string name="reset_date">Réinitialiser la date</string>
     <string name="reset_time">Réinitialiser l\'heure</string>
-    <string name="reset_duration">Réinitialiser la durée</string>
     <string name="reset_all">Réinitialiser</string>
     <string name="all">Tout</string>
     <string name="nothing">Rien</string>
@@ -28,10 +23,7 @@
     <string name="meeting_to_be_deleted">La réunion suivante va être effacée :</string>
     <string name="select_a_day">Choisissez une date</string>
     <string name="select_a_room">Choisissez une salle</string>
-    <string name="delete_meeting">Supprimer la réunion</string>
     <string name="all_rooms">Toutes</string>
-    <string name="all_users">Tous</string>
-    <string name="none_room">Aucune</string>
     <string name="none_user">Aucun</string>
     <string name="meeting_average_duration">45</string>
     <string name="select_users">Sélectionner les participants</string>

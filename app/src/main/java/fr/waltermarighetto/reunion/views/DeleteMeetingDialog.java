@@ -60,17 +60,6 @@ public class DeleteMeetingDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        //on crée la vue à afficher
-
-        //on crée un bouton listener
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-            }
-        };
-
-        // on crée AlertDialog
         return new AlertDialog.Builder(getActivity())
                 .setMessage(message)
                 .setTitle(mContext.getString(R.string.meeting_to_be_deleted))

@@ -66,12 +66,8 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
 
         Room ro = aDataset.get(position).getRoom();
         holder.mImageStatus.setColorFilter(ro.getColor());
-         //       setBackgroundColor(ro.getColor());
-  //      for (int i = 0; i < InitData.getRoomsGlobal().size(); i++) {
-  //          if (ro.getName().toString().equals( InitData.getRoomsGlobal().get(i).getName().toString())) {
-  //              holder.mImageStatus.setBackgroundColor(roomColors[i]);
-  //              break;}
-  //      }
+
+
         //      holder.mImageStatus.getDrawable();
         holder.mImageRemove.forceLayout();
 
@@ -112,6 +108,7 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
 
                             FragmentManager manager =  ((AppCompatActivity)mContext).getSupportFragmentManager();
                             DeleteMeetingDialog dialog = new DeleteMeetingDialog(mContext, getAdapterPosition());
+//                    DeleteMeetingFragment dialog = new DeleteMeetingFragment();
                             dialog.show(manager, "delete");
                         }
 

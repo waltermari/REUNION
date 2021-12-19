@@ -5,19 +5,12 @@
     <string name="new_meeting_enter_name">الغرض من الاجتماع</string>
     <string name="delete_cross">محو</string>
     <string name="ok">موافق</string>
-    <string name="clear">محو</string>
-    <string name="clear_all">مسح الكل</string>
     <string name="cancel">إلغاء الأمر</string>
-    <string name="select_all">حدد الكل</string>
-    <string name="unselect_all">تحديد بلا</string>
     <string name="select_users">اختيار المشاركين</string>
     <string name="from">من:</string>
     <string name="to">في</string>
     <string name="none_user">اي</string>
-    <string name="none_room">لا</string>
-    <string name="all_users">كل</string>
     <string name="all_rooms">كل</string>
-    <string name="delete_meeting">حذف الاجتماع</string>
     <string name="select_a_room">اختيار غرفة</string>
     <string name="select_a_day">اختيار تاريخ</string>
     <string name="meeting_to_be_deleted">سيتم حذف الاجتماع التالي:</string>
@@ -33,7 +26,6 @@
     <string name="nothing">شيء</string>
     <string name="all">كل</string>
     <string name="reset_all">اعاده تعيين</string>
-    <string name="reset_duration">إعادة تعيين المدة</string>
     <string name="reset_date">تاريخ إعادة التعيين</string>
     <string name="reset_time">إعادة تعيين الوقت</string>
 </resources>

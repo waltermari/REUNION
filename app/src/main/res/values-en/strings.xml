@@ -4,14 +4,9 @@
     <string name="new_meeting_title">New meeting</string>
     <string name="new_meeting_enter_name">Meeting topic</string>
     <string name="delete_cross">Delete</string>
-    <string name="clear">Delete</string>
-    <string name="clear_all">Delete all</string>
     <string name="cancel">Cancel</string>
-    <string name="select_all">Select all</string>
-    <string name="unselect_all">Unselect all</string>
     <string name="reset_date">Reset date</string>
     <string name="reset_time">Reset time</string>
-    <string name="reset_duration">Reset duration</string>
     <string name="reset_all">Reset</string>
     <string name="all">All</string>
     <string name="nothing">None</string>
@@ -26,10 +21,7 @@
     <string name="meeting_to_be_deleted">Following meeting will be deleted:</string>
     <string name="select_a_day">Choose a day</string>
     <string name="select_a_room">choose a room</string>
-    <string name="delete_meeting">Delete the meeting</string>
     <string name="all_rooms">All</string>
-    <string name="all_users">All</string>
-    <string name="none_room">None</string>
     <string name="none_user">None</string>
     <string name="select_users">Select users</string>
     <string name="from">From:</string>

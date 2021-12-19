@@ -1,27 +1,23 @@
 package fr.waltermarighetto.reunion.views;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,8 +25,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -63,10 +59,10 @@ public class NewMeetingDialog extends DialogFragment {
 
 
 
+    @NonNull
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
 
         //on crée la vue à afficher
         View v = LayoutInflater.from(getActivity())
@@ -80,17 +76,7 @@ public class NewMeetingDialog extends DialogFragment {
         manageUsers(v);
 
         resetNewMeeting();
-//////////////////////////////////////////////////
-        //on crée un bouton listener
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                // rajouter les actions
-            }
-        };
-        ///////////////////////////////////////////////////////////////
 
-        // on crée AlertDialog
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.new_meeting_title)
@@ -109,7 +95,7 @@ public class NewMeetingDialog extends DialogFragment {
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                    dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View view) {
@@ -169,8 +155,7 @@ public class NewMeetingDialog extends DialogFragment {
                             InitData.addSortedMeeting(currentMeeting);
                             FilterMeetings.FilterMeetings();
                             MainActivity.mMeetingsAdapter.notifyDataSetChanged();
-                            //resetNewMeeting();
-                            //Dismiss once everything is OK.
+
                             dialog.dismiss();
                         }
 
@@ -200,7 +185,7 @@ public class NewMeetingDialog extends DialogFragment {
                 if (!meetingName.getText().toString().isEmpty()) {
                     clearMeetingName.setVisibility(View.VISIBLE);
                     mandatoryName.setVisibility(View.GONE);
-                    meetingName.setBackgroundColor(getResources().getColor(R.color.grey));
+
                 } else {
                     clearMeetingName.setVisibility(View.GONE);
                     mandatoryName.setVisibility(View.VISIBLE);
@@ -212,7 +197,6 @@ public class NewMeetingDialog extends DialogFragment {
             meetingName.setText("");
             mandatoryName.setVisibility(View.VISIBLE);
             meetingName.setHint(R.string.new_meeting_enter_name);
-            meetingName.setBackgroundColor(getResources().getColor(R.color.grey));
             clearMeetingName.setVisibility(View.GONE);
         });
     }
@@ -248,12 +232,12 @@ public class NewMeetingDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-                    new DatePickerDialog(meetingDate.getContext(),
-                            date,
-                            newMeetingCalendar.get(Calendar.YEAR),
-                            newMeetingCalendar.get(Calendar.MONTH),
-                            newMeetingCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                          }
+                new DatePickerDialog(meetingDate.getContext(),
+                        date,
+                        newMeetingCalendar.get(Calendar.YEAR),
+                        newMeetingCalendar.get(Calendar.MONTH),
+                        newMeetingCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
         });
 
 
@@ -280,7 +264,7 @@ public class NewMeetingDialog extends DialogFragment {
         resetTime = view.findViewById(R.id.reset_time);
         meetingEndTime = view.findViewById(R.id.meeting_end_time);
 
-          View timePickerView = LayoutInflater.from(getActivity())
+        View timePickerView = LayoutInflater.from(getActivity())
                 .inflate(R.layout.time_picker,null);
         newMeetingTimePicker = timePickerView.findViewById(R.id.time_picker);
         newMeetingTimePicker.setIs24HourView(true); // à mettre peut-être dans le profil utilisateur ou lié à la locale
@@ -310,14 +294,13 @@ public class NewMeetingDialog extends DialogFragment {
             @Override
             public  void onClick(View v) {
                 new TimePickerDialog(meetingTime.getContext(),
-                            timeSetListener,
-                            newMeetingTimePicker.getHour(),
-                            newMeetingTimePicker.getMinute(), false).show();
+                        timeSetListener,
+                        newMeetingTimePicker.getHour(),
+                        newMeetingTimePicker.getMinute(), false).show();
 
-                }
+            }
 
-            });
-
+        });
 
         resetTime.setOnClickListener(fv -> {
             meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitData.dtfTime));
@@ -419,7 +402,7 @@ public class NewMeetingDialog extends DialogFragment {
         String  roomSelectedName = getString(R.string.select_a_room);
         int roomSelectedId =0;
         if (roomSpinner.getSelectedItemPosition() !=0)
-        roomSelectedName = roomPicklistAdaptor.getItem(roomSpinner.getSelectedItemPosition()).toString();
+            roomSelectedName = roomPicklistAdaptor.getItem(roomSpinner.getSelectedItemPosition()).toString();
 
         roomPicklistAdaptor.clear();
         roomPicklistAdaptor.add(getActivity().getString(R.string.select_a_room));  // String vide pour dire qu'on ne sélectionne aucune room
@@ -435,7 +418,7 @@ public class NewMeetingDialog extends DialogFragment {
                     }
                 }
             }
-            if (keepRoom == true) {
+            if (keepRoom) {
                 roomPicklistAdaptor.add(room.getName());
                 // on ne peut pas garder la sélection sur une salle qui n'est pas dans la liste
                 if (room.getName().equals(roomSelectedName))
@@ -474,7 +457,6 @@ public class NewMeetingDialog extends DialogFragment {
                 }
                 if (s=="") s=getString(R.string.none_user);
                 meetingUsers.setText(s);
-
             }
         };
 
@@ -482,14 +464,22 @@ public class NewMeetingDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
 
-               FragmentManager manager = ((AppCompatActivity) getActivity()).getSupportFragmentManager();
-                //             if (manager.findFragmentByTag("users") != null) return;
-          //      usersPickerDialog = new MultiPicker().MultiPicker(usersNames, currentUsersSelection, getString(R.string.select_users), listener);
-         //    usersPickerDialog.show(manager, "users");
-            usersPickerDialog = MultiPicker.getInstance(usersNames,
-                    currentUsersSelection, getString(R.string.select_users), listener, getContext());
-        //       usersPickerDialog.show(manager, "users");
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                if (manager.findFragmentByTag("userpicker") != null) return;
 
+                Bundle args=new Bundle();
+
+                args.putStringArray("USERS", usersNames);
+                args.putBooleanArray("SELECTED",currentUsersSelection);
+                args.putString("TITLE", getString(R.string.select_users).toString());
+                usersPickerDialog = new MultiPicker();
+                usersPickerDialog.setListener(listener);
+                usersPickerDialog.setArguments(args);
+                usersPickerDialog.show(manager, "userpicker");
+
+
+//               usersPickerDialog = MultiPicker.getInstance(usersNames,
+//                      currentUsersSelection, getString(R.string.select_users), listener, getContext());
             }
         });
 
@@ -498,7 +488,7 @@ public class NewMeetingDialog extends DialogFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void resetNewMeeting() {
-        meetingName.setBackgroundColor(getResources().getColor(R.color.grey));
+
         meetingName.setText("");
         mandatoryName.setVisibility(View.VISIBLE);
         meetingName.setHint(R.string.new_meeting_enter_name);
@@ -522,7 +512,7 @@ public class NewMeetingDialog extends DialogFragment {
         roomSpinner.setBackgroundColor(Color.alpha(0));
 
         meetingUsers.setText(R.string.none_user);
-//        usersPickerDialog.clearSelectedValues();
+
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void endTimeCalculation() {
@@ -534,4 +524,6 @@ public class NewMeetingDialog extends DialogFragment {
 
         meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime)+s);
     }
+
 }
+

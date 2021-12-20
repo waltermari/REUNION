@@ -34,22 +34,14 @@ public class MultiPicker extends DialogFragment  {
     private Context mContext;
     private DialogInterface.OnClickListener mListener;
 
+    @NonNull
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Dialog onCreateDialog(Bundle savedInstanceState){
         Bundle args = getArguments();
+        assert args != null;
         mValues = args.getStringArray("USERS");
         mSelectedItems =args.getBooleanArray("SELECTED");
 
-
-
-
-//    public static MultiPicker getInstance(String[] values, boolean[] selected, String title,
-//                                          DialogInterface.OnClickListener listener, Context context) {
-//        if (mInstance == null) {
-//            mInstance = new MultiPicker();
-//        }
-//        mSelectedItems = selected;
-        //       mValues = values;
         String selectAllText = mContext.getString(R.string.all).toString();
         String selectNoneText = mContext.getString(R.string.nothing).toString();
 
@@ -132,7 +124,6 @@ public class MultiPicker extends DialogFragment  {
 public void setListener(DialogInterface.OnClickListener listener) {
         mListener = listener;
 }
-
 
     @Override
     public void onAttach(@NonNull Context context) {

@@ -40,7 +40,7 @@ public class DeleteMeetingFragment extends DialogFragment {
                                 break;
                             }
                         FilterMeetings.FilterMeetings();
-                        MainActivity.mMeetingsAdapter.notifyDataSetChanged();
+  //                      MainActivity.mMeetingsAdapter.notifyDataSetChanged();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

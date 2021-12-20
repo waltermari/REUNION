@@ -1,27 +1,22 @@
 package fr.waltermarighetto.reunion.views;
 
-// import android.content.Context;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-
-
-
 import java.util.List;
 
 import fr.waltermarighetto.reunion.R;
+import fr.waltermarighetto.reunion.controller.FilterMeetings;
 import fr.waltermarighetto.reunion.model.Meeting;
 import fr.waltermarighetto.reunion.model.InitData;
 import fr.waltermarighetto.reunion.model.Room;
@@ -30,17 +25,31 @@ import fr.waltermarighetto.reunion.model.User;
 public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MeetingsViewHolder> {
     private  List<Meeting> aDataset;
     private Context mContext;
+    Meeting meeting_to_delete;
 
     // Tableau de couleur des salles
- //   int[] roomColors = {Color.BLUE, Color.GREEN, Color.BLACK, Color.RED,
-  //          Color.CYAN, Color.GRAY, Color.MAGENTA, Color.YELLOW, Color.DKGRAY, Color.LTGRAY};
+    //   int[] roomColors = {Color.BLUE, Color.GREEN, Color.BLACK, Color.RED,
+    //          Color.CYAN, Color.GRAY, Color.MAGENTA, Color.YELLOW, Color.DKGRAY, Color.LTGRAY};
 
     public MeetingsAdapter(Context context, List<Meeting> dataset ) {
         this.aDataset = dataset;
         this.mContext = context;
     }
 
+    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        public void onClick(DialogInterface dialog, int id) {
+            //OK
+            for (int i = 0; i< InitData.getMeetingsGlobal().size(); i++ )
+                if (meeting_to_delete.equals(InitData.getMeetingsGlobal().get(i))) {
+                    InitData.getMeetingsGlobal().remove(i);
+                    break;
+                }
+            FilterMeetings.FilterMeetings();
+            MeetingsAdapter.this.notifyDataSetChanged();
+        }
+    };
 
     @NonNull
     @Override
@@ -66,14 +75,8 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
 
         Room ro = aDataset.get(position).getRoom();
         holder.mImageStatus.setColorFilter(ro.getColor());
-
-
-        //      holder.mImageStatus.getDrawable();
         holder.mImageRemove.forceLayout();
-
-
     }
-
 
 
     @Override
@@ -105,19 +108,15 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
                 @Override
                 public void onClick(View v) {
 
-
-                            FragmentManager manager =  ((AppCompatActivity)mContext).getSupportFragmentManager();
-                            DeleteMeetingDialog dialog = new DeleteMeetingDialog(mContext, getAdapterPosition());
-//                    DeleteMeetingFragment dialog = new DeleteMeetingFragment();
-                            dialog.show(manager, "delete");
-                        }
+                    FragmentManager manager =  ((AppCompatActivity)mContext).getSupportFragmentManager();
+                    DeleteMeetingDialog dialog = new DeleteMeetingDialog();
+                    meeting_to_delete = FilterMeetings.getFilteredMeetings().get(getAdapterPosition());
+                    dialog.setMeetingToDelete(meeting_to_delete);
+                    dialog.setListener(listener);
+                    dialog.show(manager, "delete");
+                }
 
             });
         }
-
-
     }
-
-
-
 }

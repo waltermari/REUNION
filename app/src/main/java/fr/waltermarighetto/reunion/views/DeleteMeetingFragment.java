@@ -13,9 +13,7 @@ import androidx.fragment.app.DialogFragment;
 
 import fr.waltermarighetto.reunion.R;
 import fr.waltermarighetto.reunion.controller.FilterMeetings;
-import fr.waltermarighetto.reunion.controller.MainActivity;
 import fr.waltermarighetto.reunion.model.InitData;
-import fr.waltermarighetto.reunion.model.Meeting;
 
 public class DeleteMeetingFragment extends DialogFragment {
     @RequiresApi(api = Build.VERSION_CODES.O)

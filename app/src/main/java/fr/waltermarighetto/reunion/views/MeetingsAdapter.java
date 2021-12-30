@@ -1,5 +1,6 @@
 package fr.waltermarighetto.reunion.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
@@ -8,17 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 import fr.waltermarighetto.reunion.R;
 import fr.waltermarighetto.reunion.controller.FilterMeetings;
-import fr.waltermarighetto.reunion.model.Meeting;
 import fr.waltermarighetto.reunion.model.InitData;
+import fr.waltermarighetto.reunion.model.Meeting;
 import fr.waltermarighetto.reunion.model.Room;
 import fr.waltermarighetto.reunion.model.User;
 
@@ -27,17 +30,14 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
     private Context mContext;
     Meeting meeting_to_delete;
 
-    // Tableau de couleur des salles
-    //   int[] roomColors = {Color.BLUE, Color.GREEN, Color.BLACK, Color.RED,
-    //          Color.CYAN, Color.GRAY, Color.MAGENTA, Color.YELLOW, Color.DKGRAY, Color.LTGRAY};
-
-    public MeetingsAdapter(Context context, List<Meeting> dataset ) {
+     public MeetingsAdapter(Context context, List<Meeting> dataset ) {
         this.aDataset = dataset;
         this.mContext = context;
     }
 
     DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
+        @SuppressLint("NotifyDataSetChanged")
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void onClick(DialogInterface dialog, int id) {
             //OK

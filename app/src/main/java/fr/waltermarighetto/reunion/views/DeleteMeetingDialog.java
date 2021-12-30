@@ -9,9 +9,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
+
 import java.time.temporal.ChronoUnit;
 
 import fr.waltermarighetto.reunion.R;
@@ -19,11 +21,9 @@ import fr.waltermarighetto.reunion.model.Meeting;
 import fr.waltermarighetto.reunion.model.User;
 
 public class DeleteMeetingDialog extends DialogFragment {
-
     Context mContext;
     Meeting meeting_to_delete;
     DialogInterface.OnClickListener mListener;
-
 
     @NonNull
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -46,8 +46,6 @@ public class DeleteMeetingDialog extends DialogFragment {
         for (User u : meeting_to_delete.getUsers())
             s += u.getUser().toString() + "\n";
         message += s;
-
-
 
         // on crée AlertDialog
         return new AlertDialog.Builder(getActivity())

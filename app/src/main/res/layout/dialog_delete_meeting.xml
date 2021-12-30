@@ -13,7 +13,7 @@
 
         android:text="@string/meeting_name"
         android:textAlignment="viewStart"
-
+app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

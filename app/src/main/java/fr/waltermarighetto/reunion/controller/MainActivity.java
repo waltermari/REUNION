@@ -1,30 +1,27 @@
 package fr.waltermarighetto.reunion.controller;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.annotation.SuppressLint;
-import android.os.Build;
-import android.os.Bundle;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import fr.waltermarighetto.reunion.R;
 import fr.waltermarighetto.reunion.model.InitData;
+import fr.waltermarighetto.reunion.model.Meeting;
 import fr.waltermarighetto.reunion.views.FilterMeetingsDialog;
 import fr.waltermarighetto.reunion.views.MeetingsAdapter;
-import fr.waltermarighetto.reunion.views.MainListener;
 import fr.waltermarighetto.reunion.views.NewMeetingDialog;
 
 @SuppressLint({"NewApi", "ResourceType"})
@@ -53,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         // configure Refresh avec SwipeRefreshLayout
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onRefresh() {
                 FilterMeetings.FilterMeetings();
@@ -109,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // devrait être remplacé par un accès direct car il n'y a qu'une possibilité
@@ -149,7 +148,12 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         invalidateOptionsMenu();
 
     }
-
+    @Override
+    public void onNewMeetingUpdate(Meeting meeting) {
+        InitData.addSortedMeeting(meeting);
+        FilterMeetings.FilterMeetings();
+        mMeetingsAdapter.notifyDataSetChanged();
+    }
 
 }
 

@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import fr.waltermarighetto.reunion.R;
+import fr.waltermarighetto.reunion.controller.MainListener;
 import fr.waltermarighetto.reunion.model.InitData;
 import fr.waltermarighetto.reunion.model.Room;
 
@@ -94,6 +95,7 @@ public class FilterMeetingsDialog extends DialogFragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void prepareCalendar(View view) {
         filterDateEditText = view.findViewById(R.id.filter_date);
+
         filterCalendarView = view.findViewById(R.id.filter_calendar);
         filterCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)

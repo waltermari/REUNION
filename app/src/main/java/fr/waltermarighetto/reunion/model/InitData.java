@@ -1,28 +1,16 @@
 package fr.waltermarighetto.reunion.model;
 
-import static java.time.LocalDateTime.now;
-
 import android.graphics.Color;
 import android.os.Build;
-import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-
-import fr.waltermarighetto.reunion.R;
-import fr.waltermarighetto.reunion.model.Meeting;
-import fr.waltermarighetto.reunion.model.Room;
-import fr.waltermarighetto.reunion.model.User;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class InitData {

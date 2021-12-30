@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,22 +19,24 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Scroller;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-
 import fr.waltermarighetto.reunion.R;
-import fr.waltermarighetto.reunion.controller.FilterMeetings;
-import fr.waltermarighetto.reunion.controller.MainActivity;
+import fr.waltermarighetto.reunion.controller.MainListener;
 import fr.waltermarighetto.reunion.model.InitData;
 import fr.waltermarighetto.reunion.model.Meeting;
 import fr.waltermarighetto.reunion.model.Room;
@@ -48,6 +52,7 @@ public class NewMeetingDialog extends DialogFragment {
     Spinner roomSpinner;
     ArrayAdapter<String> roomPicklistAdaptor;
     MultiPicker   usersPickerDialog;
+    MainListener mListener;
     boolean[] currentUsersSelection;  // peut-on s'en passer ?
 
     @NonNull
@@ -80,7 +85,6 @@ public class NewMeetingDialog extends DialogFragment {
                 .setCancelable(false);
 
         AlertDialog dialog = builder.create();
-
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
@@ -138,9 +142,7 @@ public class NewMeetingDialog extends DialogFragment {
                             }
                             currentMeeting.setUsers(lUser);
                             meetingUsers.setText(s);
-                            InitData.addSortedMeeting(currentMeeting);
-                            FilterMeetings.FilterMeetings();
-                            MainActivity.mMeetingsAdapter.notifyDataSetChanged();
+                            mListener.onNewMeetingUpdate(currentMeeting);
                             dialog.dismiss();
                         }
                     }
@@ -149,6 +151,13 @@ public class NewMeetingDialog extends DialogFragment {
         });
         return dialog;
     }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mListener = (MainListener) context;
+    }
+
 
     private void manageName(View view) {
         meetingName = view.findViewById(R.id.meeting_name);
@@ -404,6 +413,11 @@ public class NewMeetingDialog extends DialogFragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void manageUsers(View view) {
         meetingUsers = view.findViewById(R.id.meeting_users);
+
+        meetingUsers.setScroller(new Scroller((Context) getContext()));
+        meetingUsers.setVerticalScrollBarEnabled(true);
+        meetingUsers.setMovementMethod(new ScrollingMovementMethod());
+
         String[] usersNames = new String[InitData.getUsersGlobal().size()];
         currentUsersSelection = new boolean[InitData.getUsersGlobal().size()];
 
@@ -437,9 +451,7 @@ public class NewMeetingDialog extends DialogFragment {
 
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 if (manager.findFragmentByTag("userpicker") != null) return;
-
                 Bundle args=new Bundle();
-
                 args.putStringArray("USERS", usersNames);
                 args.putBooleanArray("SELECTED",currentUsersSelection);
                 args.putString("TITLE", getString(R.string.select_users).toString());

@@ -4,30 +4,22 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.DataSetObserver;
-import android.location.GnssAntennaInfo;
-import android.net.sip.SipSession;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
-import java.util.ArrayList;
-
 import fr.waltermarighetto.reunion.R;
-import fr.waltermarighetto.reunion.controller.MainActivity;
-import fr.waltermarighetto.reunion.model.InitData;
+
 
 public class MultiPicker extends DialogFragment  {
-    //   private static Object mInstance;
+
     private static String[] mValues;
     private static boolean[] mSelectedItems;
     private static AlertDialog mDialog;
@@ -104,9 +96,9 @@ public class MultiPicker extends DialogFragment  {
                 });
             }
         });
-        //       mDialog.show();
+
         return mDialog;
-        //      return (MultiPicker) mInstance;
+
     }
 
     public static void unselectAllValues(){

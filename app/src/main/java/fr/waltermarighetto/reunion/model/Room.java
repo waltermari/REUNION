@@ -3,11 +3,11 @@ package fr.waltermarighetto.reunion.model;
 import androidx.annotation.NonNull;
 
 public class Room {
-     @NonNull
+    @NonNull
     private String mName;
-     private int mColor;
+    private int mColor;
 
-     @NonNull
+    @NonNull
     public String getName() {  return mName; }
     public int getColor() {
         return mColor;

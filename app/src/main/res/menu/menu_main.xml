@@ -6,13 +6,9 @@
 
     <item
         android:id="@+id/filter_meetings"
-
-
         android:title="@string/filter_meetings"
         app:actionLayout="@layout/custom_action_item_layout"
         app:showAsAction="always" />
-
-
 
 </menu>
 

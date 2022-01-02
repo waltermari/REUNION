@@ -10,13 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
 import fr.waltermarighetto.reunion.R;
-
 
 public class MultiPicker extends DialogFragment  {
 
@@ -34,15 +32,14 @@ public class MultiPicker extends DialogFragment  {
         mValues = args.getStringArray("USERS");
         mSelectedItems =args.getBooleanArray("SELECTED");
 
-        String selectAllText = mContext.getString(R.string.all).toString();
-        String selectNoneText = mContext.getString(R.string.nothing).toString();
+        String selectAllText = mContext.getString(R.string.all);
+        String selectNoneText = mContext.getString(R.string.nothing);
 
-        View v = LayoutInflater.from(mContext)
-                .inflate(R.layout.item_multi_selection, null);
+        LayoutInflater.from(mContext).inflate(R.layout.item_multi_selection, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         int toggleText = R.string.nothing;
-        for (boolean b : mSelectedItems) if (!b) {toggleText = R.string.all; break;};
+        for (boolean b : mSelectedItems) if (!b) {toggleText = R.string.all; break;}
         mDialog = builder
                 .setTitle(args.getString("TITLE"))
                 .setMultiChoiceItems(mValues, mSelectedItems,
@@ -59,7 +56,6 @@ public class MultiPicker extends DialogFragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //Cancel on ne fait rien du tout
-
                     }
                 })
                 .setPositiveButton(R.string.ok, mListener)
@@ -72,7 +68,7 @@ public class MultiPicker extends DialogFragment  {
             @Override
             public void onShow(DialogInterface dialogInterface) {
 
-                Button button = ((AlertDialog) mDialog).getButton(AlertDialog.BUTTON_NEUTRAL);
+                Button button = mDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
                 button.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -82,15 +78,14 @@ public class MultiPicker extends DialogFragment  {
                             for (int i = 0; i < mValues.length; i++) {
                                 mSelectedItems[i] = true;
                                 listview.setItemChecked(i, true);
-                                button.setText(selectNoneText);
                             }
+                            button.setText(selectNoneText);
                         } else {
                             for (int i = 0; i < mValues.length; i++) {
                                 mSelectedItems[i] = false;
                                 listview.setItemChecked(i, false);
-
-                                button.setText(selectAllText);
                             }
+                            button.setText(selectAllText);
                         }
                     }
                 });
@@ -101,27 +96,17 @@ public class MultiPicker extends DialogFragment  {
 
     }
 
-    public static void unselectAllValues(){
-        for (int i=0; i< mValues.length; i++)
-            mSelectedItems[i]= false;
-    }
-
-    public static void selectAllValues() {
-        for (int i=0; i< mValues.length; i++)
-            mSelectedItems[i]= true;
-    }
     public static boolean[] getSelected() {
         return mSelectedItems;
     }
-public void setListener(DialogInterface.OnClickListener listener) {
+
+    public void setListener(DialogInterface.OnClickListener listener) {
         mListener = listener;
-}
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mContext=context;
-
-
     }
 }

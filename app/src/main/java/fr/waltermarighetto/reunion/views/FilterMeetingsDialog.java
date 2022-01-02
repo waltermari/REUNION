@@ -35,19 +35,20 @@ public class FilterMeetingsDialog extends DialogFragment {
     private static ArrayList<String> mRooms;
     private static LocalDate mDate;
     private MainListener mListener;
-    private CalendarView filterCalendarView;
 
+    @NonNull
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Dialog onCreateDialog(Bundle savedInstanceState){
         Bundle args = getArguments();
+        assert args != null;
         String[]  roomsNames = args.getStringArray("ROOMS");
-        mRooms= new ArrayList<String>();
+        mRooms= new ArrayList<>();
         int i=0;
         while ( i<roomsNames.length) {
             mRooms.add(roomsNames[i]);
             i++;
         }
-        if (args.getString("DATE") =="") mDate = null;
+        if (args.getString("DATE").equals("")) mDate = null;
         else mDate = LocalDate.parse(args.getString("DATE"));
 
         View v = LayoutInflater.from(getActivity())
@@ -96,7 +97,7 @@ public class FilterMeetingsDialog extends DialogFragment {
     private void prepareCalendar(View view) {
         filterDateEditText = view.findViewById(R.id.filter_date);
 
-        filterCalendarView = view.findViewById(R.id.filter_calendar);
+        CalendarView filterCalendarView = view.findViewById(R.id.filter_calendar);
         filterCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -116,7 +117,7 @@ public class FilterMeetingsDialog extends DialogFragment {
     private void prepareRoomSpinner(@NonNull View view) {
         filterRoomSpinner = view.findViewById(R.id.filter_room);
         clearRoom = view.findViewById(R.id.clear_room);
-        ArrayAdapter<String> aA = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> aA = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item);
         aA.add(getString(R.string.all_rooms));  // String pour dire qu'on sélectionne toutes les salles
 
         for (Room room : InitData.getRoomsGlobal()) aA.add(room.getName());
@@ -126,7 +127,7 @@ public class FilterMeetingsDialog extends DialogFragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
                                        int position, long id) {
-
+                mRooms.clear();
                 String s = (String) filterRoomSpinner.getSelectedItem();
                 if (!s.equals(getString(R.string.all_rooms))) {
                     mRooms.add(s);
@@ -161,7 +162,7 @@ public class FilterMeetingsDialog extends DialogFragment {
         if (mRooms.size() != 0) {
             for (String s : mRooms) {
                 for( int i=0; i < InitData.getRoomsGlobal().size(); i++ ) {
-                    if (s.toString().equals(InitData.getRoomsGlobal().get(i).getName())) {
+                    if (s.equals(InitData.getRoomsGlobal().get(i).getName())) {
                         filterRoomSpinner.setSelection(i+1);
                         clearRoom.setVisibility(View.VISIBLE);
                         break;

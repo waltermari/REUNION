@@ -26,11 +26,11 @@ import fr.waltermarighetto.reunion.model.Room;
 import fr.waltermarighetto.reunion.model.User;
 
 public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.MeetingsViewHolder> {
-    private  List<Meeting> aDataset;
-    private Context mContext;
+    private final List<Meeting> aDataset;
+    private final Context mContext;
     Meeting meeting_to_delete;
 
-     public MeetingsAdapter(Context context, List<Meeting> dataset ) {
+    public MeetingsAdapter(Context context, List<Meeting> dataset ) {
         this.aDataset = dataset;
         this.mContext = context;
     }
@@ -56,15 +56,12 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.Meetin
     public MeetingsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.item_meetings, parent, false);
-        MeetingsViewHolder meetingsViewHolder = new MeetingsViewHolder(view);
-        return meetingsViewHolder;
-
+        return new MeetingsViewHolder(view);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull MeetingsViewHolder holder, final int position) {
-        //       final YourItemViewHolder itemViewHolder = (YourItemViewHolder) holder;
         holder.mTextMeeting.setText(aDataset.get(position).getName());
         holder.mTextTime.setText(" - " + InitData.dtfTime.format(aDataset.get(position).getStart()) + " - ");
         holder.mTextRoom.setText(aDataset.get(position).getRoom().getName());

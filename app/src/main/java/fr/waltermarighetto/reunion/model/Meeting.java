@@ -10,14 +10,6 @@ public class Meeting {
     private LocalDateTime mStart;
     private LocalDateTime mEnd;
 
- /**  public Meeting(String meetingName, Room room, UserList userList, LocalDateTime start, LocalDateTime end) {
-        mName = meetingName;
-        mRoom = room;
-        mUserList = userList;
-        mStart = start;
-        mEnd = end;
-    } */
-
     public String getName() {
         return mName;
     }

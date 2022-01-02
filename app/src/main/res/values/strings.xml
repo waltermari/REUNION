@@ -29,5 +29,6 @@
     <string name="select_users">Sélectionner les participants</string>
     <string name="from">De :</string>
     <string name="to" translatable="false">à</string>
+    <string name="badge" translatable="false">Badge</string>
 
 </resources>

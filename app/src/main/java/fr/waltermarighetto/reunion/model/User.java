@@ -9,7 +9,6 @@ public class User {
 
     public void setUser(String userMail) {
         mUser = userMail;
-
     }
 
 }

@@ -28,8 +28,7 @@ import fr.waltermarighetto.reunion.views.NewMeetingDialog;
 
 public class MainActivity extends AppCompatActivity implements MainListener {
     // pour la fenêtre de dialogue du filtre sur les réunions
-    public  static MeetingsAdapter mMeetingsAdapter;
-    private FilterMeetingsDialog filterMeetingsDialog;
+    private  MeetingsAdapter mMeetingsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         mRecycler.setAdapter(mMeetingsAdapter);
 
         // configure Refresh avec SwipeRefreshLayout
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -61,16 +60,12 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
         // Accès au dialogue de création d'un nouveau Meeting
 
-        findViewById(R.id.new_meeting).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        findViewById(R.id.new_meeting).setOnClickListener(fv -> {
                 FragmentManager manager = getSupportFragmentManager();
                 if (manager.findFragmentByTag("newmeeting") != null) return;
 
                 NewMeetingDialog dialog = new NewMeetingDialog();
                 dialog.show(manager, "newmeeting");
-
-            }
         });
     }
 
@@ -88,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             if (!FilterMeetings.getFilterRoom().isEmpty()) s = s + "R";
             if (FilterMeetings.getFilterDate() != null) s = s + "D";
 
-            if (s == "") {
+            if (s.equals("")) {
                 if (textBadgeView.getVisibility() != View.GONE)
                     textBadgeView.setVisibility(View.GONE);
             } else {
@@ -139,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onFiltersUpdated(ArrayList<String> roomNames, LocalDate date) {
         FilterMeetings.setFilterDate(date);
@@ -148,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         invalidateOptionsMenu();
 
     }
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onNewMeetingUpdate(Meeting meeting) {
         InitData.addSortedMeeting(meeting);

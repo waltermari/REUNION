@@ -15,20 +15,19 @@ import java.util.Locale;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class InitData {
 
-    private static List<User> mUsersGlobal;
-    private static List<Room> mRoomsGlobal;
-    private static List<Meeting> mMeetingsGlobal;
-// initialiser les formats en fonction de la locale (à faire)
-    public static DateTimeFormatter dtfDateTime = DateTimeFormatter.ofPattern("eeee dd-MM-YYYY HH'h'mm");
-    public static DateTimeFormatter dtfDate = DateTimeFormatter.ofPattern("eeee dd-MM-YYYY");
-    public static DateTimeFormatter dtfDateShort = DateTimeFormatter.ofPattern("dd-MM-YYYY");
+    private static final List<User> mUsersGlobal;
+    private static final List<Room> mRoomsGlobal;
+    private static final List<Meeting> mMeetingsGlobal;
+    // initialise les formats en fonction de la locale
+    public static DateTimeFormatter dtfDateTime = DateTimeFormatter.ofPattern("eeee dd-MM-yyyy HH'h'mm");
+    public static DateTimeFormatter dtfDate = DateTimeFormatter.ofPattern("eeee dd-MM-yyyy");
     public static DateTimeFormatter dtfTime = DateTimeFormatter.ofPattern("HH'h'mm");
-    public static SimpleDateFormat sdf = new SimpleDateFormat("EEEE dd/MM/yy", Locale.getDefault());
+    public static SimpleDateFormat sdf = new SimpleDateFormat("EEEE dd/MM/yyyy", Locale.getDefault());
 
-    {
-        mUsersGlobal = new ArrayList<User>();
-        mRoomsGlobal = new ArrayList<Room>();
-        mMeetingsGlobal = new ArrayList<Meeting>();
+    static {
+        mUsersGlobal = new ArrayList<>();
+        mRoomsGlobal = new ArrayList<>();
+        mMeetingsGlobal = new ArrayList<>();
 
         // on crée la liste globale des utilisateurs
         String[] utilisateurs = new String[]{"marc.martin@lamzone.com", "julie.rocca@lamzone.com",
@@ -70,13 +69,9 @@ public class InitData {
 
             Meeting mMeeting = new Meeting();
             mMeeting.setName("Budget");
+            mMeeting.setRoom(mRoomsGlobal.get(9));
 
-            Room mRoom = new Room();
-            mRoom = mRoomsGlobal.get(9);
-            mMeeting.setRoom(mRoom);
-
-            List<User> mUsers = new ArrayList<User>();
-
+            List<User> mUsers = new ArrayList<>();
             mUsers.add(mUsersGlobal.get(1));
             mUsers.add(mUsersGlobal.get(3));
             mUsers.add(mUsersGlobal.get(0));
@@ -93,12 +88,9 @@ public class InitData {
         {
             Meeting mMeeting = new Meeting();
             mMeeting.setName("Rigolade");
+            mMeeting.setRoom(mRoomsGlobal.get(0));
 
-            Room mRoom = new Room();
-            mRoom = mRoomsGlobal.get(0);
-            mMeeting.setRoom(mRoom);
-
-            List<User> mUsers = new ArrayList<User>();
+            List<User> mUsers = new ArrayList<>();
 
             mUsers.add(mUsersGlobal.get(3));
             mUsers.add(mUsersGlobal.get(4));
@@ -114,12 +106,9 @@ public class InitData {
         {
             Meeting mMeeting = new Meeting();
             mMeeting.setName("Congés annuels à plannifier");
+            mMeeting.setRoom(mRoomsGlobal.get(4));
 
-            Room mRoom = new Room();
-            mRoom = mRoomsGlobal.get(4);
-            mMeeting.setRoom(mRoom);
-
-            List<User> mUsers = new ArrayList<User>();
+            List<User> mUsers = new ArrayList<>();
 
             mUsers.add(mUsersGlobal.get(9));
             mUsers.add(mUsersGlobal.get(7));
@@ -140,12 +129,9 @@ public class InitData {
         {
             Meeting mMeeting = new Meeting();
             mMeeting.setName("Avec personne");
+            mMeeting.setRoom(mRoomsGlobal.get(5));
 
-            Room mRoom = new Room();
-            mRoom = mRoomsGlobal.get(5);
-            mMeeting.setRoom(mRoom);
-
-            List<User> mUsers = new ArrayList<User>();
+            List<User> mUsers = new ArrayList<>();
             mMeeting.setUsers(mUsers);
 
             mMeeting.setStart(LocalDateTime.now().minusMinutes(5));
@@ -157,12 +143,9 @@ public class InitData {
         {
             Meeting mMeeting = new Meeting();
             mMeeting.setName("Réunion A");
+            mMeeting.setRoom(mRoomsGlobal.get(3));
 
-            Room mRoom = new Room();
-            mRoom = mRoomsGlobal.get(3);
-            mMeeting.setRoom(mRoom);
-
-            List<User> mUsers = new ArrayList<User>();
+            List<User> mUsers = new ArrayList<>();
 
             mUsers.add(mUsersGlobal.get(16));
             mUsers.add(mUsersGlobal.get(4));
@@ -182,18 +165,13 @@ public class InitData {
         {
             Meeting mMeeting = new Meeting();
             mMeeting.setName("Réunion B");
+            mMeeting.setRoom(mRoomsGlobal.get(8));
 
-            Room mRoom = new Room();
-            mRoom = mRoomsGlobal.get(8);
-            mMeeting.setRoom(mRoom);
-
-            List<User> mUsers = new ArrayList<User>();
-
+            List<User> mUsers = new ArrayList<>();
 
             mUsers.add(mUsersGlobal.get(2));
             mUsers.add(mUsersGlobal.get(7));
             mUsers.add(mUsersGlobal.get(19));
-
 
             mMeeting.setUsers(mUsers);
 
@@ -206,12 +184,9 @@ public class InitData {
         {
             Meeting mMeeting = new Meeting();
             mMeeting.setName("Réunion C");
+            mMeeting.setRoom(mRoomsGlobal.get(9));
 
-            Room mRoom = new Room();
-            mRoom = mRoomsGlobal.get(9);
-            mMeeting.setRoom(mRoom);
-
-            List<User> mUsers = new ArrayList<User>();
+            List<User> mUsers = new ArrayList<>();
 
             mUsers.add(mUsersGlobal.get(5));
             mUsers.add(mUsersGlobal.get(4));
@@ -231,19 +206,14 @@ public class InitData {
         {
             Meeting mMeeting = new Meeting();
             mMeeting.setName("Réunion D");
+            mMeeting.setRoom(mRoomsGlobal.get(7));
 
-            Room mRoom = new Room();
-            mRoom = mRoomsGlobal.get(7);
-            mMeeting.setRoom(mRoom);
-
-            List<User> mUsers = new ArrayList<User>();
-
+            List<User> mUsers = new ArrayList<>();
 
             mUsers.add(mUsersGlobal.get(4));
             mUsers.add(mUsersGlobal.get(2));
             mUsers.add(mUsersGlobal.get(3));
             mUsers.add(mUsersGlobal.get(1));
-
 
             mMeeting.setUsers(mUsers);
 
@@ -256,19 +226,15 @@ public class InitData {
         {
             Meeting mMeeting = new Meeting();
             mMeeting.setName("Réunion E");
+            mMeeting.setRoom(mRoomsGlobal.get(8));
 
-            Room mRoom = new Room();
-            mRoom = mRoomsGlobal.get(8);
-            mMeeting.setRoom(mRoom);
-
-            List<User> mUsers = new ArrayList<User>();
+            List<User> mUsers = new ArrayList<>();
 
             mUsers.add(mUsersGlobal.get(5));
             mUsers.add(mUsersGlobal.get(4));
             mUsers.add(mUsersGlobal.get(2));
             mUsers.add(mUsersGlobal.get(3));
             mUsers.add(mUsersGlobal.get(1));
-
 
             mMeeting.setUsers(mUsers);
 
@@ -284,7 +250,7 @@ public class InitData {
             Meeting mMeeting = new Meeting();
             mMeeting.setName("1 minute");
             mMeeting.setRoom(mRoomsGlobal.get(3));
-            List<User> mUsers = new ArrayList<User>();
+            List<User> mUsers = new ArrayList<>();
 
             mUsers.add(mUsersGlobal.get(2));
             mUsers.add(mUsersGlobal.get(3));
@@ -305,12 +271,11 @@ public class InitData {
             mMeeting.setName("2 minutes");
             mMeeting.setRoom(mRoomsGlobal.get(3));
 
-            List<User> mUsers = new ArrayList<User>();
+            List<User> mUsers = new ArrayList<>();
 
             mUsers.add(mUsersGlobal.get(2));
             mUsers.add(mUsersGlobal.get(3));
             mUsers.add(mUsersGlobal.get(1));
-
 
             mMeeting.setUsers(mUsers);
 
@@ -324,7 +289,7 @@ public class InitData {
             Meeting mMeeting = new Meeting();
             mMeeting.setName("3 minutes");
             mMeeting.setRoom(mRoomsGlobal.get(3));
-            List<User> mUsers = new ArrayList<User>();
+            List<User> mUsers = new ArrayList<>();
 
             mUsers.add(mUsersGlobal.get(2));
             mUsers.add(mUsersGlobal.get(3));
@@ -356,7 +321,7 @@ public class InitData {
         int size = mMeetingsGlobal.size();
         if ( size == 0) mMeetingsGlobal.add(meeting);
 
-       else for ( int i=0; i<size; i++) {
+        else for ( int i=0; i<size; i++) {
             if (meeting.getStart().isBefore(mMeetingsGlobal.get(i).getStart())) {
                 mMeetingsGlobal.add(i, meeting);
                 break;

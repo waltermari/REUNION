@@ -30,7 +30,7 @@ public class DeleteMeetingDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String message = mContext.getString(R.string.meeting_name) + "\n"
-                + meeting_to_delete.getName().toString() + "\n\n"
+                + meeting_to_delete.getName() + "\n\n"
                 + mContext.getString(R.string.from) + " "
                 + dtfDateTime.format(meeting_to_delete.getStart()) + " "
                 + mContext.getString(R.string.to) + " "
@@ -44,7 +44,7 @@ public class DeleteMeetingDialog extends DialogFragment {
 
         String s = "";
         for (User u : meeting_to_delete.getUsers())
-            s += u.getUser().toString() + "\n";
+            s += u.getUser() + "\n";
         message += s;
 
         // on crée AlertDialog

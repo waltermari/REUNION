@@ -16,8 +16,8 @@ import fr.waltermarighetto.reunion.model.Meeting;
 public class FilterMeetings {
 
     private static LocalDate filterDate = null;
-    private static ArrayList<String> filterRoom = new ArrayList<String>();
-    private final static List<Meeting> meetings = new ArrayList<Meeting>();
+    private static ArrayList<String> filterRoom = new ArrayList<>();
+    private final static List<Meeting> meetings = new ArrayList<>();
 
     public static List<Meeting> FilterMeetings() {
 
@@ -25,10 +25,10 @@ public class FilterMeetings {
 
         // on supprime de la liste tous les meetings qui finissent avant timeToUseForChecks
         // (now si pas de filtre par date, 00h00 de la date du filtre sinon)
-        LocalDateTime timeToUseForChecks = LocalDateTime.now();
+        LocalDateTime timeToUseForChecks;
         if (filterDate == null)
             timeToUseForChecks = LocalDateTime.now();
-        else timeToUseForChecks = (LocalDateTime) filterDate.atStartOfDay();
+        else timeToUseForChecks = filterDate.atStartOfDay();
 
         for (Meeting meet : InitData.getMeetingsGlobal()) {
             if (meet.getEnd().isAfter(timeToUseForChecks)) { //le meeting n'est pas termminé
@@ -38,14 +38,14 @@ public class FilterMeetings {
                     if (filterRoom.size() > 0) { //on filtre par salle
                         for (String ro : filterRoom) {
                             if (meet.getRoom().getName().equals(ro))
-                                meetings.add((Meeting) meet);
+                                meetings.add(meet);
                         }
                     } //on ne filtre pas par salle
-                  else  meetings.add((Meeting) meet);
+                  else  meetings.add(meet);
                 } // on passe au meeting suivant
             }
         }
-        return (ArrayList<Meeting>) meetings;
+        return meetings;
     }
 
     public static LocalDate getFilterDate() {

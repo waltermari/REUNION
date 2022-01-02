@@ -26,7 +26,6 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -34,6 +33,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import fr.waltermarighetto.reunion.R;
 import fr.waltermarighetto.reunion.controller.MainListener;
@@ -53,7 +53,7 @@ public class NewMeetingDialog extends DialogFragment {
     ArrayAdapter<String> roomPicklistAdaptor;
     MultiPicker   usersPickerDialog;
     MainListener mListener;
-    boolean[] currentUsersSelection;  // peut-on s'en passer ?
+    boolean[] currentUsersSelection;
 
     @NonNull
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -92,7 +92,6 @@ public class NewMeetingDialog extends DialogFragment {
 
                     @Override
                     public void onClick(View view) {
-                        // Reset new meeting
                         resetNewMeeting();
                     }
                 });
@@ -118,8 +117,8 @@ public class NewMeetingDialog extends DialogFragment {
                             Meeting currentMeeting = new Meeting();
                             currentMeeting.setName((meetingName.getText().toString()));
                             for (Room r : InitData.getRoomsGlobal())
-                                if (r.getName().toString().equals(roomPicklistAdaptor
-                                        .getItem(roomSpinner.getSelectedItemPosition()).toString())) {
+                                if (r.getName().equals(roomPicklistAdaptor
+                                        .getItem(roomSpinner.getSelectedItemPosition()))) {
                                     currentMeeting.setRoom(r);
                                     break;
                                 }
@@ -128,14 +127,14 @@ public class NewMeetingDialog extends DialogFragment {
 
                             // users
                             String s = "";
-                            List<User> lUser = new ArrayList<User>();
+                            List<User> lUser = new ArrayList<>();
 
                             if (usersPickerDialog != null) {
                                 boolean[] selection = usersPickerDialog.getSelected();
 
                                 for (int i = 0; i < selection.length; i++) {
                                     if (selection[i]) {
-                                        s += InitData.getUsersGlobal().get(i).getUser().toString() + "\n";
+                                        s += InitData.getUsersGlobal().get(i).getUser() + "\n";
                                         lUser.add(InitData.getUsersGlobal().get(i));
                                     }
                                 }
@@ -157,7 +156,6 @@ public class NewMeetingDialog extends DialogFragment {
         super.onAttach(context);
         mListener = (MainListener) context;
     }
-
 
     private void manageName(View view) {
         meetingName = view.findViewById(R.id.meeting_name);
@@ -334,7 +332,7 @@ public class NewMeetingDialog extends DialogFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void manageRoom(View view) {
-        roomPicklistAdaptor = new ArrayAdapter<String>(getActivity(),
+        roomPicklistAdaptor = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item);
 
         roomSpinner = view.findViewById(R.id.meeting_room_spinner);
@@ -382,7 +380,7 @@ public class NewMeetingDialog extends DialogFragment {
         String  roomSelectedName = getString(R.string.select_a_room);
         int roomSelectedId =0;
         if (roomSpinner.getSelectedItemPosition() !=0)
-            roomSelectedName = roomPicklistAdaptor.getItem(roomSpinner.getSelectedItemPosition()).toString();
+            roomSelectedName = roomPicklistAdaptor.getItem(roomSpinner.getSelectedItemPosition());
 
         roomPicklistAdaptor.clear();
         roomPicklistAdaptor.add(getActivity().getString(R.string.select_a_room));  // String vide pour dire qu'on ne sélectionne aucune room
@@ -414,7 +412,7 @@ public class NewMeetingDialog extends DialogFragment {
     private void manageUsers(View view) {
         meetingUsers = view.findViewById(R.id.meeting_users);
 
-        meetingUsers.setScroller(new Scroller((Context) getContext()));
+        meetingUsers.setScroller(new Scroller(getContext()));
         meetingUsers.setVerticalScrollBarEnabled(true);
         meetingUsers.setMovementMethod(new ScrollingMovementMethod());
 
@@ -436,11 +434,11 @@ public class NewMeetingDialog extends DialogFragment {
                 for (int i = 0; i < selection.length; i++) {
 
                     if (selection[i]) {
-                        s += InitData.getUsersGlobal().get(i).getUser().toString() + "\n";
+                        s += InitData.getUsersGlobal().get(i).getUser() + "\n";
                         currentUsersSelection[i] = true;
                     } else currentUsersSelection[i] = false;
                 }
-                if (s=="") s=getString(R.string.none_user);
+                if (s.equals("")) s=getString(R.string.none_user);
                 meetingUsers.setText(s);
             }
         };
@@ -449,12 +447,12 @@ public class NewMeetingDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
 
-                FragmentManager manager = getActivity().getSupportFragmentManager();
+                FragmentManager manager = requireActivity().getSupportFragmentManager();
                 if (manager.findFragmentByTag("userpicker") != null) return;
                 Bundle args=new Bundle();
                 args.putStringArray("USERS", usersNames);
                 args.putBooleanArray("SELECTED",currentUsersSelection);
-                args.putString("TITLE", getString(R.string.select_users).toString());
+                args.putString("TITLE", getString(R.string.select_users));
                 usersPickerDialog = new MultiPicker();
                 usersPickerDialog.setListener(listener);
                 usersPickerDialog.setArguments(args);
@@ -471,14 +469,11 @@ public class NewMeetingDialog extends DialogFragment {
         mandatoryName.setVisibility(View.VISIBLE);
         meetingName.setHint(R.string.new_meeting_enter_name);
         clearMeetingName.setVisibility(View.GONE);
-
         meetingDate.setText(LocalDateTime.now().toLocalDate().format(InitData.dtfDate));
         mStart = LocalDateTime.now();
         resetDate.setVisibility(View.GONE);
-
         meetingTime.setText(LocalDateTime.now().toLocalTime().format(InitData.dtfTime));
         resetTime.setVisibility(View.GONE);
-
         meetingDuration.setText(getString(R.string.meeting_average_duration));
         resetDuration.setVisibility(View.GONE);
 
@@ -495,11 +490,10 @@ public class NewMeetingDialog extends DialogFragment {
     private void endTimeCalculation() {
         if ((meetingDuration.getText().toString().isEmpty())) mEnd=mStart;
         else   mEnd = mStart.plusMinutes(Integer.parseInt(meetingDuration.getText().toString()));
-        int jours = mEnd.toLocalDate().compareTo(mStart.toLocalDate());
+        int jours = (int) (mEnd.toLocalDate().toEpochDay()-mStart.toLocalDate().toEpochDay());
         String s="";
         if ( jours >0)   s = " (+" + jours + ")";
         meetingEndTime.setText(mEnd.toLocalTime().format(InitData.dtfTime)+s);
     }
-
 }
 

@@ -12,46 +12,9 @@ import fr.waltermarighetto.reunion.model.Meeting;
 import fr.waltermarighetto.reunion.model.Room;
 import fr.waltermarighetto.reunion.model.User;
 
-public class ReunionTest {
+public class ReunionTestIT {
     List<Meeting> meetingList = new ArrayList<>();
-    @Test
-    public void testUsers() {
-        User mUser;
-        String mString;
-        String domaine;
-        mUser = new User();
 
-        mString = "TEST des utilisateurs avec n'importe quoi comme "
-                + "texte depuis une chaine vide et plein " +
-                "de caractères spéciaux comme $%#{}=ç<>!:;,";
-
-        domaine = "@lamzone.com";
-
-
-        for (int i = 0; i < mString.length(); i++) {
-            for (int j = 0; j <= i; j++) {
-
-                mUser.setUser(mString.substring(j, i) + domaine);
-                assertEquals(mUser.getUser(), mString.substring(j, i) + domaine);
-            }
-        }
-    }
-    @Test
-    public void testRooms() {
-
-        Room mRoom = new Room();
-        String mString = "Sallederéuniontrèslongueavecbeaucoupdecaracteresdanslenompour"+
-                "testersicelafonctionnebienavecledébordementéventuel";
-
-        int j = 0;
-        for (int i = 0; i < mString.length(); i++) {
-            mRoom.setName(mString.substring(i));
-            mRoom.setColor(j);
-            assertEquals(mRoom.getName(), mString.substring(i));
-            assertEquals(mRoom.getColor(),j);
-            j++;
-        }
-    }
     @Test
     public void testMeetings() {
         Meeting mMeeting;

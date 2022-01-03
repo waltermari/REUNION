@@ -1,4 +1,4 @@
-package fr.waltermarighetto.reunion.views;
+package fr.waltermarighetto.reunion;
 
 import junit.framework.TestCase;
 

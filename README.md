@@ -26,11 +26,16 @@ Model :
 Controller :
 -	MainActivity :
 o	Affiche (RecyclerView) la liste des réunions triées par date et heure de début, éventuellement filtrées par date et salle. 
+
 	Sans filtre de date, les réunions terminées ne sont pas affichées. 
+
 	Une couleur arbitraire est attribuée à chaque salle, matérialisée par le disque coloré en début de ligne pour visualiser les salles occupées d’un coup d’œil. 
+
 o	Permet de rafraichir la liste des réunions (swipe). Les réunions terminées disparaissent
 o	Permet d’activer les filtres de date et salle via l’icone filtre du menu. 
+
 	Un badge indique en rouge les filtres positionnés (R pour Room, D pour Date)
+
 o	Permet d’appeler la fenêtre de création de réunions (icone « plus » flottante)
 o	Permet d’appeler la fenêtre d’effacement d’une réunion (icone corbeille en fin de ligne).
 
@@ -42,26 +47,39 @@ o	Interfaces pour définir dans MainActivity les Listeners utilisés dans les fe
 
 Views :
 -	MeetingsAdapter :
+
 o	Adapte la liste des réunions à afficher dans un RecyclerView 
 
 -	FilterMeetingsDialog :
+-
 o	Fenêtre de dialogue pour définir les filtres éventuels (salle et/ou date)
+
 	En entrée : filtres courants via Bundle
+
 	En sortie : filtres mis à jour utilisés par le listener défini via interface.
 
 -	DeleteMeetingDialog :
+
 o	Fenêtre de dialogue avec détails de la réunion à effacer (confirmation/annulation)
+
 	Si effacement validé, le listener défini via l’interface MainListener est utilisé
 
 -	MultiPicker :
+
 o	Fenêtre générale de sélection multiple utilisée ici pour sélectionner plusieurs utilisateurs en création de nouvelle réunion.
+
 	En entrée (via Bundle) :  liste de noms, liste de booléens (sélection courante).
+
 	 Retour géré par le listener passé par la méthode setListener.
+
 o	Gestion bascule « tout sélectionner/rien sélectionner »
 
 -	NewMeetingDialog :
+-
 o	Crée une nouvelle réunion
+
 	Pas de paramètre d’entrée. 
+
 	Sortie : la nouvelle réunion est ajoutée par le listener passé via l’interface MainListener, dans la liste (maintenue triée par date de début) des réunions et l’affichage est mis à jour.
 o	Fonctionnalités particulières :
 	Seuls 2 champs sont marqués obligatoires : nom de la réunion et salle. En cas de validation avec champ manquant, ce dernier a un fond rouge et validation impossible
